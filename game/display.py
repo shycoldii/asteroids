@@ -1,100 +1,62 @@
 import pygame
 import pygame.gfxdraw
 
-from vector_utils import vector
 
 class Display:
-    background = pygame.image.load("D:/it_projects/asteroids/data/background.jpg")
-    height = None
-    width = None
-    user_size = None
-    size = None
-    window_size = None
-    is_fullscreen= False
+    background = pygame.image.load("./data/background.jpg")
     all_font = {}
-    window = None
-    end = False
 
-    @classmethod
-    def init(cls, width, height):
+    def __init__(self, width, height):
         """
         Инициализация дисплея
         :param width: ширина
         :param height: высота
         """
-        cls.set_cursor()
-        cls.user_size = vector(pygame.display.Info().current_w,  # размер экрана "компьютера"
-                               pygame.display.Info().current_h)
-        cls.size = vector(width, height)  # заданные настройки
-        cls.window_size = cls.size.copy()
+        self.user_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)  # размер экрана "компьютера"
+        self.window_size = (width, height)  # заданные настройки
         # Размер окна будет такой, как текущий
-        cls.resize(cls.size.x, cls.size.y)
+        self.is_fullscreen = False
+        self.window = pygame.display.set_mode(self.window_size)
         # Создание окна с заданными настройками
-        cls.update_frame()
-        cls.width = width
-        cls.height = height
+        self.update_frame()
+        pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
-    @classmethod
-    def set_cursor(cls):
-        """Курсор вида треугольник"""
-        try:
-            pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-        except:
-            pass
-
-    @classmethod
-    def resize(cls, w, h):
+    def resize(self, new_size):
         """
         Изменение размера экрана
-        :param w: ширина
-        :param h: высота
+        :param new_size:
         """
-        if cls.is_fullscreen:
-            cls.window = pygame.display.set_mode((w, h), pygame.FULLSCREEN)
+        if self.is_fullscreen:
+            self.window = pygame.display.set_mode(new_size, pygame.FULLSCREEN)
         else:
-            cls.window = pygame.display.set_mode((w, h), pygame.RESIZABLE)
+            self.window = pygame.display.set_mode(new_size, pygame.RESIZABLE)
 
-    @classmethod
-    def full_screen(cls):
+    def full_screen(self):
         """Полноэкранный режим"""
-        cls.is_fullscreen = not cls.is_fullscreen
-        if cls.is_fullscreen:
-            cls.resize(cls.user_size.x, cls.user_size.y)
+        self.is_fullscreen = not self.is_fullscreen
+        if self.is_fullscreen:
+            self.resize(self.user_size)
             # на размер полного "компьютерного" экрана
         else:
-            cls.resize(cls.width, cls.height)
+            self.resize(self.window_size)
             # на постоянный размер
 
-    @classmethod
-    def update_frame(cls):
+    def update_frame(self):
         """Обновление окна"""
-        #TODO: потом сюда можно добавлять всякие штуки наподобие ракет и тд
-        if cls.is_fullscreen:
-            cls.draw_img(cls.background,vector(0,0),(cls.user_size.x,cls.user_size.y))
+        # TODO: потом сюда можно добавлять всякие штуки наподобие ракет и тд
+        if self.is_fullscreen:
+            self.draw_img(self.background, self.user_size, (0, 0))
         else:
-            cls.draw_img(cls.background, vector(0, 0), (cls.size.x,cls.size.y))
 
-    @classmethod
-    def draw_img(cls, img, pos,size):
+            self.draw_img(self.background, self.window_size, (0, 0))
+
+    def draw(self, obj):
+        obj.draw(self.window)
+
+    def draw_img(self, img, size, pos):
         """
         Появление картинок на экране
         :param img: картинка, загруженная с помощью pygame.image.load
         :param pos: где хотим разместить (векторный набор)
-        :param size: какого размера
         """
-        cls.window.blit(pygame.transform.scale(img, size), pos.totuple())
-
-
-if __name__ == "__main__":
-    pygame.init()
-    Display.init(800,600) #потом это заменит
-    pygame.display.set_mode(Display.window_size.totuple())
-    c=0
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_F12:
-                    Display.full_screen()
-        Display.update_frame()
-        pygame.display.flip()
-    pygame.quit()
+        self.window.blit(pygame.transform.scale(img, size), pos)

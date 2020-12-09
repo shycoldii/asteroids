@@ -8,18 +8,17 @@ H = 600  # ось y
 SIZE = 55  # размер картинки
 MAX = 15  # максимальное количество астероидов на экране
 
-class Asteroid():
+
+class Asteroid:
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.asteroid = pygame.image.load('ast.png').convert_alpha()  # передаем картинку
+        self.asteroid = pygame.image.load('../data/ast.png').convert_alpha()  # передаем картинку
         self.asteroid = pygame.transform.scale(self.asteroid, (SIZE, SIZE))  # задаем размер картинке
-
 
     # движение астероидов
     def move(self):
-
         self.speed = random.randrange(1, 2)  # задаем скорость
         self.y += self.speed
 
@@ -37,7 +36,6 @@ class Asteroid():
             if self.x < (0 - SIZE):
                 self.x = W
 
-
     # рисуем астероиды на экране
     def showing(self):
         screen.blit(self.asteroid, (self.x, self.y))
@@ -47,13 +45,13 @@ all_asteroid = []
 
 # создание астеройдов в рандомных местах(случайное положение x, y)
 
+
 def init_aster(MAX, all_asteroid):
 
-    for i in range(1, MAX):
+    for _ in range(1, MAX):
         x = random.randrange(0, W)
         y = random.randrange(0, H)
-        all_asteroid.append(Asteroid(x,y))
-
+        all_asteroid.append(Asteroid(x, y))
 
 
 pygame.init()
@@ -73,4 +71,3 @@ while game:
 
     time.sleep(0.001)
     pygame.display.flip()
-
