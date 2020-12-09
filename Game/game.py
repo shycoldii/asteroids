@@ -1,9 +1,10 @@
 import pygame
 import configparser
 
-from .display import Display
-from .state import State
+from Game.display import Display
+from Game.state import State
 from pygame.math import Vector2
+from Game.map import Map
 
 
 class Game:
@@ -15,6 +16,7 @@ class Game:
         self.finished = False
         self.state = State.MENU
         self.display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
+        self.map = Map(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
 
     def run(self):
         """Начало игры"""
@@ -25,10 +27,15 @@ class Game:
             mouse_pos = Vector2(mx, my)
             mouse_pressed = pygame.mouse.get_pressed()[0]
             if self.state == State.MENU:
+                # отрисовываем заставку
+                # мониторим щелчок по области заставки
+                # если щелчок произошел, то self.state = State.Game
                 pass
             elif self.state == State.GAME:
                 pass
-            elif self.state == State.END:
+            elif self.state == State.LOOSE:
+                pass
+            elif self.state == State.WIN:
                 pass
 
     def handle_keys(self):

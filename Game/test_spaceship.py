@@ -1,6 +1,6 @@
 import pygame as pg
 
-from spaceship import Spaceship
+from Game.spaceship import Spaceship
 
 WIDTH = HEIGHT = 800
 FPS = 60

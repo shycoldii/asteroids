@@ -1,5 +1,6 @@
 import pygame
 import pygame.gfxdraw
+from pygame.math import Vector2
 
 
 class Display:
@@ -60,3 +61,22 @@ class Display:
         :param pos: где хотим разместить (векторный набор)
         """
         self.window.blit(pygame.transform.scale(img, size), pos)
+
+    def draw_text(self, text, pos, size=16, color=(255, 255, 255), base_pos=Vector2(0, 0)):
+        pos = pos.copy()
+        pos = pos.toint()
+        font_size = round(size)  # надо тут как-то поменять размер шрифта
+        if not (pos.x in range(-font_size*len(text), self.size.x+font_size*len(text)) and pos.y in range(-font_size, self.size.y+font_size)):
+            return
+        font = pygame.font.SysFont("Roboto-Black.tff", font_size)
+        text = str(text)
+        color = [int(color[i]) if color[i] <= 255 else 255 for i in range(len(color))]
+        text_surface = font.render(text, True, color)
+        if len(color) == 4 and color[3] != 255:
+            # если есть прозрачность
+            alpha_img = pygame.Surface(text_surface.get_size(), pygame.SRCALPHA)
+            alpha_img.fill((255, 255, 255, color[3]))
+            text_surface.blit(alpha_img, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        size = Vector2(text_surface.get_width(), text_surface.get_height())
+        pos -= size//2
+        self.window.blit(text_surface, pos.totuple())
