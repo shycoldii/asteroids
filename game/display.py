@@ -45,22 +45,21 @@ class Display:
         """Обновление окна"""
         # TODO: потом сюда можно добавлять всякие штуки наподобие ракет и тд
         if self.is_fullscreen:
-            self.background = pygame.transform.scale(self.background, self.user_size)
-            self.draw_img(self.background, (0, 0))
+            self.draw_img(self.background, self.user_size, (0, 0))
         else:
-            self.background = pygame.transform.scale(self.background, self.size)
-            self.draw_img(self.background, (0, 0))
+
+            self.draw_img(self.background, self.size, (0, 0))
 
     def draw(self, obj):
         obj.draw(self.window)
 
-    def draw_img(self, img, pos):
+    def draw_img(self, img, size, pos):
         """
         Появление картинок на экране
         :param img: картинка, загруженная с помощью pygame.image.load
         :param pos: где хотим разместить (векторный набор)
         """
-        self.window.blit(img, pos)
+        self.window.blit(pygame.transform.scale(img, size), pos)
 
 
 if __name__ == "__main__":
