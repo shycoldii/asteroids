@@ -13,7 +13,7 @@ class Display:
         :param height: высота
         """
         self.user_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)  # размер экрана "компьютера"
-        self.size = self.window_size = (width, height)  # заданные настройки
+        self.window_size = (width, height)  # заданные настройки
         # Размер окна будет такой, как текущий
         self.is_fullscreen = False
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
@@ -38,7 +38,7 @@ class Display:
             self.resize(self.user_size)
             # на размер полного "компьютерного" экрана
         else:
-            self.resize(self.size)
+            self.resize(self.window_size)
             # на постоянный размер
 
     def update_frame(self):
@@ -48,7 +48,7 @@ class Display:
             self.draw_img(self.background, self.user_size, (0, 0))
         else:
 
-            self.draw_img(self.background, self.size, (0, 0))
+            self.draw_img(self.background, self.window_size, (0, 0))
 
     def draw(self, obj):
         obj.draw(self.window)
