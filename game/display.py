@@ -16,7 +16,7 @@ class Display:
         self.window_size = (width, height)  # заданные настройки
         # Размер окна будет такой, как текущий
         self.is_fullscreen = False
-        self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
+        self.window = pygame.display.set_mode(self.window_size)
         # Создание окна с заданными настройками
         self.update_frame()
         pygame.mouse.set_cursor(*pygame.cursors.tri_left)
