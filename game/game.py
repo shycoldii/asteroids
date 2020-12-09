@@ -1,4 +1,5 @@
 import pygame
+import configparser
 
 from .display import Display
 from .state import State
@@ -8,9 +9,12 @@ from pygame.math import Vector2
 class Game:
 
     def __init__(self):
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
         self.finished = False
         self.state = State.MENU
-        self.display = Display(800, 600)
+        self.display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
 
     def run(self):
         """Начало игры"""
