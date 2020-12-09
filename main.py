@@ -9,9 +9,8 @@ from game.game import Game
 def initialization():
     """Инициализация нужных файлов игры"""
     pygame.init()
-    Display.init(width=int(config["Game"]["WINDOW_WIDTH"]),
-                 height=int(config["Game"]["WINDOW_HEIGHT"]))
-    pygame.display.set_mode(Display.window_size.totuple())
+    display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
+    pygame.display.set_mode(display.window_size)
 
 
 if __name__ == "__main__":

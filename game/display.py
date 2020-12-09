@@ -3,7 +3,7 @@ import pygame.gfxdraw
 
 
 class Display:
-    background = pygame.image.load("../data/background.jpg")
+    background = pygame.image.load("./data/background.jpg")
     all_font = {}
 
     def __init__(self, width, height):

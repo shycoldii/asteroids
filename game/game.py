@@ -1,7 +1,7 @@
 import pygame
 
-from display import Display
-from state import State
+from .display import Display
+from .state import State
 from pygame.math import Vector2
 
 
