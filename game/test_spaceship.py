@@ -9,7 +9,10 @@ pg.init()
 display = pg.display.set_mode((WIDTH, HEIGHT))
 clock = pg.time.Clock()
 
+
+# ========== setup ========== #
 spaceship = Spaceship()
+# =========================== #
 
 
 def on_execute():
