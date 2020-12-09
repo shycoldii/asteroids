@@ -29,7 +29,7 @@ class Display:
         if self.is_fullscreen:
             self.window = pygame.display.set_mode(new_size, pygame.FULLSCREEN)
         else:
-            pass
+            self.window = pygame.display.set_mode(new_size, pygame.RESIZABLE)
 
     def full_screen(self):
         """Полноэкранный режим"""
