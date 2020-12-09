@@ -4,6 +4,7 @@ from display import Display
 from state import State
 from pygame.math import Vector2
 
+
 class Game:
 
     def __init__(self):
