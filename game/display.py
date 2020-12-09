@@ -35,7 +35,7 @@ class Display:
         """Полноэкранный режим"""
         self.is_fullscreen = not self.is_fullscreen
         if self.is_fullscreen:
-            self.resize(*self.user_size)
+            self.resize(self.user_size)
             # на размер полного "компьютерного" экрана
         else:
             self.resize(self.size)
