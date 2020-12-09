@@ -2,8 +2,7 @@ import pygame
 
 from display import Display
 from state import State
-from vector_utils import vector
-
+from pygame.math import Vector2
 
 class Game:
 
@@ -18,7 +17,7 @@ class Game:
         while not self.finished:
             self.handle_keys()
             mx, my = pygame.mouse.get_pos()
-            mouse_pos = vector(mx, my)
+            mouse_pos = Vector2(mx, my)
             mouse_pressed = pygame.mouse.get_pressed()[0]
             if self.state == State.MENU:
                 pass
