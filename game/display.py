@@ -60,18 +60,3 @@ class Display:
         :param pos: где хотим разместить (векторный набор)
         """
         self.window.blit(pygame.transform.scale(img, size), pos)
-
-
-if __name__ == "__main__":
-    pygame.init()
-    display = Display(800, 600)
-    pygame.display.set_mode(display.window_size)
-    c = 0
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_F12:
-                    display.full_screen()
-        display.update_frame()
-        pygame.display.flip()
-    pygame.quit()
