@@ -11,7 +11,7 @@ clock = pg.time.Clock()
 
 
 # ========== setup ========== #
-spaceship = Spaceship()
+spaceship = Spaceship(display)
 # =========================== #
 
 
