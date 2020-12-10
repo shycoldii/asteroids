@@ -8,12 +8,13 @@ class Spaceship(Sprite):
 
     def __init__(self, display, *groups):
         super(Spaceship, self).__init__(*groups)
+
         self.display = display
         self.master_image = pg.transform.scale(pg.image.load("../data/spaceship.png").convert_alpha(), (30, 30))
         self.image = self.master_image.copy()
-        self.rect = self.image.get_rect(center=(400, 400))
+        self.rect = self.image.get_rect(center=(self.display.get_width() / 2, self.display.get_height() / 2))
 
-        self._pos = Vector2(400, 400)
+        self._pos = Vector2(*self.rect.center)
         self._head = 0
 
         self._rotation = 0
