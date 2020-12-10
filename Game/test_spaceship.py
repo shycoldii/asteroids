@@ -1,8 +1,8 @@
 import pygame as pg
 
-from Game.spaceship import Spaceship
+from spaceship import Spaceship
 
-WIDTH = HEIGHT = 800
+WIDTH = HEIGHT = 600
 FPS = 60
 
 pg.init()
@@ -11,7 +11,7 @@ clock = pg.time.Clock()
 
 
 # ========== setup ========== #
-spaceship = Spaceship()
+spaceship = Spaceship(display)
 # =========================== #
 
 
@@ -21,10 +21,10 @@ def on_execute():
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                pg.quit()
                 exit(0)
 
             if event.type == pg.KEYDOWN:
-                # if event.key == pg.K_UP:
                 spaceship.on_key_press(event.key)
 
             if event.type == pg.KEYUP:
