@@ -14,7 +14,7 @@ class Asteroid:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.asteroid = pygame.image.load('../data/ast.png').convert_alpha()  # передаем картинку
+        self.asteroid = pygame.image.load('../data/ast1.png').convert_alpha()  # передаем картинку
         self.asteroid = pygame.transform.scale(self.asteroid, (SIZE, SIZE))  # задаем размер картинке
 
     # движение астероидов

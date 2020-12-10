@@ -1,9 +1,12 @@
 import pygame
 import configparser
+import random
+
 
 from .display import Display
 from .state import State
 from pygame.math import Vector2
+
 
 
 class Game:
@@ -16,8 +19,39 @@ class Game:
         config = configparser.ConfigParser()
         config.read('config.ini')
         self.finished = False
+        self.list_bkg_aster = []
         self.state = State.MENU
         self.display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
+        self.create_bkg_aster()
+
+
+    def create_bkg_aster(self):
+
+        MAX = 60
+        SIZE = 10
+
+        for i in range(1, MAX):
+            x = self.display.size[0] - i * 12 + SIZE
+            y = random.randrange(0, self.display.size[1])
+
+            self.list_bkg_aster.append([x, y])
+
+    def move_bkg_aster(self):
+        SIZE = 10
+        bkg_aster = pygame.image.load('data/ast2.png').convert()  # передаем картинку
+        clock = pygame.time.Clock()
+
+
+        for i in self.list_bkg_aster:
+            i[0] -= 1
+            if i[0] < (0 - SIZE):
+                i[0] = self.display.size[0]
+                clock.tick(30)
+            self.display.draw_img(bkg_aster, (SIZE, SIZE), (i[0], i[1]))
+
+
+
+
 
     @staticmethod
     def is_mouse_on(x_centered,y_centered,x_size,y_size,mx,my):
@@ -74,11 +108,11 @@ class Game:
 
     def run(self):
         """Начало игры"""
-        pygame.init()
         while not self.finished:
             self.handle_keys()
             if self.state == State.MENU:
                 self.apply_menu()
+                self.move_bkg_aster()  # фоновые астероиды
             elif self.state == State.GAME:
                 pass
             elif self.state == State.END:
@@ -105,3 +139,17 @@ class Game:
                     print("Выстрел")
             if event.type == pygame.QUIT:  # выход
                 self.finished = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+

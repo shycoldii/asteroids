@@ -89,7 +89,10 @@ class Display:
         :return: None
         """
         font_size = round(size)
-        font_family = "D:/it_projects/asteroids/data/Astrolab.ttf"
+        try:
+            font_family = "./data/Astrolab.ttf"
+        except:
+            font_family = "data/Astrolab.ttf"
         font =pygame.font.Font(font_family, font_size)
         text = str(text)
         color = [int(color[i]) if color[i] <= 255 else 255 for i in range(len(color))]
