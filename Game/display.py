@@ -5,7 +5,6 @@ from pygame import Vector2
 
 class Display:
     background = pygame.image.load("./data/background.jpg")
-
     def __init__(self, width, height):
         """
         Инициализация дисплея
