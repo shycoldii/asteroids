@@ -33,11 +33,9 @@ class Cannon(AbstractModule):
                 self._add_missile(pos, space_head)
             else:
                 distance = pos.distance_to(self._missiles[-1].position)
-                # TODO: баг с меньшим измерением
+                # TODO: баг с большим измерением
                 if distance > self._frequency:
                     if min(self._display.get_size()) - distance > self._frequency:
-                        self._add_missile(pos, space_head)
-                    if max(self._display.get_size()) - distance > self._frequency:
                         self._add_missile(pos, space_head)
 
         for p in self._missiles:
