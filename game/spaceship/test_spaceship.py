@@ -2,17 +2,18 @@ import pygame as pg
 
 from spaceship import Spaceship
 from game.background import Background
+from game.broken_display import Display
 
 WIDTH = 900
 HEIGHT = 675
 FPS = 60
 
 pg.init()
-display = pg.display.set_mode((WIDTH, HEIGHT))
 clock = pg.time.Clock()
 
 
 # ========== setup ========== #
+display = Display(900, 675)
 spaceship = Spaceship(display=display)
 background = Background(display=display)
 # =========================== #
