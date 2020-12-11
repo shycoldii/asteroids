@@ -9,9 +9,9 @@ class Background:
 
     def __init__(self, display):
         self._display = display
-        self._size = self._display.get_size
-        self.image = pg.transform.scale(pg.image.load("./data/background.jpg").convert(), self._display.get_size())
-        self.rect = self.image.get_rect(center=(self._display.get_width() / 2, self._display.get_height() / 2))
+        self._size = self._display.get_size()
+        self.image = pg.transform.scale(pg.image.load("./data/background.jpg").convert(), self._size)
+        self.rect = self.image.get_rect(center=(self._size[0] / 2, self._size[1] / 2))
         self._asteroids = [Asteroid(display=self._display) for _ in range(22)]
 
     def update(self):
