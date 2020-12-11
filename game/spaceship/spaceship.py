@@ -2,9 +2,9 @@ import pygame as pg
 import math
 from pygame.math import Vector2
 
-from game.physical_object import PhysicalObject
-from jet_engine import JetEngine
-from cannon import Cannon
+from Game.physical_object import PhysicalObject
+from .jet_engine import JetEngine
+from .cannon import Cannon
 
 
 class Spaceship(PhysicalObject):
@@ -13,7 +13,7 @@ class Spaceship(PhysicalObject):
         pos = pos or Vector2(display.get_width() / 2, display.get_height() / 2)
         super().__init__(pos, display, *groups)
 
-        self._master_image = pg.transform.scale(pg.image.load("../../data/spaceship.png").convert_alpha(), (30, 30))
+        self._master_image = pg.transform.scale(pg.image.load("/Users/13polbr/Desktop/asteroids/data/spaceship.png").convert_alpha(), (30, 30))
         self.image = self._master_image.copy()
         self.rect = self.image.get_rect(center=self._pos)
 
@@ -28,11 +28,12 @@ class Spaceship(PhysicalObject):
         self._jet_engine = JetEngine(self._pos, self._master_image.get_size(), self._head, self._display)
         self._cannon = Cannon(self._pos, self._master_image.get_size(), self._head, self._display)
 
-        self._health = 3
+        self._health = 2
+        self.score = 0
 
     def _move(self):
         self._pos += self._speed
-        self._speed *= 0.98
+        self._speed *= 0.85
         super()._move()
 
     def _boost(self):

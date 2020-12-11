@@ -1,8 +1,8 @@
 import pygame as pg
 
-from spaceship import Spaceship
-from game.background import Background
-from game.display import Display
+from Game.spaceship.spaceship import Spaceship
+from Game.background import Background
+from Game.display import Display
 
 WIDTH = 900
 HEIGHT = 675
