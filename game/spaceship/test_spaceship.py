@@ -1,7 +1,9 @@
 import pygame as pg
+
 from spaceship import Spaceship
 
-WIDTH = HEIGHT = 600
+WIDTH = 900
+HEIGHT = 675
 FPS = 60
 
 pg.init()
@@ -10,7 +12,7 @@ clock = pg.time.Clock()
 
 
 # ========== setup ========== #
-spaceship = Spaceship(display)
+spaceship = Spaceship(display=display)
 # =========================== #
 
 
