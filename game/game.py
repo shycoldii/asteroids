@@ -2,7 +2,7 @@ import pygame
 import configparser
 import random
 
-
+from .background import Background
 from .display import Display
 from .state import State
 from pygame.math import Vector2
@@ -14,7 +14,7 @@ class Game:
     pygame.mixer.init()
     menu_sound = pygame.mixer.Sound("data/menu.mp3")
     space_sound = pygame.mixer.Sound("data/space.mp3")
-    menu_sound.play()
+    menu_sound.play(-1)
     def __init__(self):
         config = configparser.ConfigParser()
         config.read('config.ini')
@@ -22,6 +22,7 @@ class Game:
         self.list_bkg_aster = []
         self.state = State.MENU
         self.display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
+        self.background = Background(display=self.display.window)
         self.create_bkg_aster()
 
 
@@ -104,15 +105,16 @@ class Game:
         if Game.is_mouse_on(x_centered, y_centered, x_size, y_size, mx, my) and mouse_pressed:
             self.state = State.GAME
             self.menu_sound.stop()
-            self.space_sound.play()
+            self.space_sound.play(-1)
 
     def run(self):
         """Начало игры"""
         while not self.finished:
+            self.background.draw()
+            self.background.update()
             self.handle_keys()
             if self.state == State.MENU:
                 self.apply_menu()
-                self.move_bkg_aster()  # фоновые астероиды
             elif self.state == State.GAME:
                 pass
             elif self.state == State.END:
