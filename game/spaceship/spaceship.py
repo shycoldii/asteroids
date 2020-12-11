@@ -13,7 +13,7 @@ class Spaceship(PhysicalObject):
         pos = pos or Vector2(display.get_width() / 2, display.get_height() / 2)
         super().__init__(pos, display, *groups)
 
-        self._master_image = pg.transform.scale(pg.image.load("./data/spaceship.png").convert_alpha(), (30, 30))
+        self._master_image = pg.transform.scale(pg.image.load("../../data/spaceship.png").convert_alpha(), (30, 30))
         self.image = self._master_image.copy()
         self.rect = self.image.get_rect(center=self._pos)
 
