@@ -2,6 +2,7 @@ import pygame as pg
 from pygame.math import Vector2
 import pygame.gfxdraw
 
+
 class Display:
 
     def __init__(self, width, height):
@@ -9,7 +10,7 @@ class Display:
         pg.mouse.set_cursor(*pg.cursors.tri_left)
 
         self._size = (width, height)
-        self._default_size = (width,height)
+        self._default_size = (width, height)
         self._full_size = (pg.display.Info().current_w, pg.display.Info().current_h)
         self._display = pg.display.set_mode(self._size)
 
