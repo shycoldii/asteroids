@@ -28,6 +28,8 @@ class Spaceship(PhysicalObject):
         self._jet_engine = JetEngine(self._pos, self._master_image.get_size(), self._head, self._display)
         self._cannon = Cannon(self._pos, self._master_image.get_size(), self._head, self._display)
 
+        self._health = 3
+
     def _move(self):
         self._pos += self._speed
         self._speed *= 0.98
@@ -50,6 +52,16 @@ class Spaceship(PhysicalObject):
     @property
     def cannon(self):
         return self._cannon
+
+    def is_alive(self):
+        return self._health != 0
+
+    def collision(self, damage=True):
+        if damage:
+            if self._health > 1:
+                self._health -= 1
+            else:
+                self._health = 0
 
     def on_key_press(self, key):
         if key == pg.K_UP:
