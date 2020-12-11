@@ -50,7 +50,7 @@ class Particle(PhysicalObject):
         self.rect = self.image.get_rect(center=self._pos)
 
         self._opacity = 255
-        self._color = (255, 0, 0)
+        self._color = (0, 240, 240)
         self._done = False
 
         self._speed = speed

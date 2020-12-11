@@ -1,6 +1,7 @@
 import pygame as pg
 
 from spaceship import Spaceship
+from game.background import Background
 
 WIDTH = 900
 HEIGHT = 675
@@ -13,6 +14,7 @@ clock = pg.time.Clock()
 
 # ========== setup ========== #
 spaceship = Spaceship(display=display)
+background = Background(display=display)
 # =========================== #
 
 
@@ -39,11 +41,13 @@ def on_execute():
 
 
 def on_loop():
+    background.update()
     spaceship.update()
 
 
 def on_render():
-    spaceship.draw(display)
+    background.draw()
+    spaceship.draw()
 
 
 if __name__ == '__main__':
