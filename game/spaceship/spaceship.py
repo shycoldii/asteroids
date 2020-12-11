@@ -15,7 +15,7 @@ class Spaceship(PhysicalObject):
 
         self._master_image = pg.transform.scale(pg.image.load("../../data/spaceship.png").convert_alpha(), (30, 30))
         self.image = self._master_image.copy()
-        self.rect = self.image.get_rect(center=(self._display.get_width() / 2, self._display.get_height() / 2))
+        self.rect = self.image.get_rect(center=self._pos)
 
         self._head = 0
         self._rotation = 0
