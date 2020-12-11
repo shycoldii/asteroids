@@ -17,9 +17,7 @@ class Spaceship(PhysicalObject):
         self.image = self._master_image.copy()
         self.rect = self.image.get_rect(center=(self._display.get_width() / 2, self._display.get_height() / 2))
 
-        self._pos = Vector2(*self.rect.center)
         self._head = 0
-
         self._rotation = 0
         self._rotation_vel = 3
 
@@ -48,6 +46,10 @@ class Spaceship(PhysicalObject):
     def _turn(self):
         self._head += self._rotation
         self._head %= 360
+
+    @property
+    def cannon(self):
+        return self._cannon
 
     def on_key_press(self, key):
         if key == pg.K_UP:

@@ -1,4 +1,5 @@
 import pygame as pg
+
 from spaceship import Spaceship
 
 WIDTH = 900

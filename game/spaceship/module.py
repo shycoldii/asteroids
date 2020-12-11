@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pygame.math import Vector2
 
 
 class AbstractModule(ABC):
@@ -17,6 +18,10 @@ class AbstractModule(ABC):
 
     def stop(self):
         self._started = False
+
+    @property
+    def position(self):
+        return Vector2(self._pos)
 
     @abstractmethod
     def _calc_position(self, space_pos, space_head):

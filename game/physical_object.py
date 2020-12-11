@@ -23,8 +23,9 @@ class PhysicalObject(Sprite):
     def _move(self):
         self.rect.center = self._pos
 
-    def get_position(self):
-        return self._pos
+    @property
+    def position(self):
+        return Vector2(self._pos)
 
     def update(self):
         self._move()

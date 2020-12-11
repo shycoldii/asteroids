@@ -2,8 +2,8 @@ import pygame as pg
 import math
 from pygame.math import Vector2
 
-from module import AbstractModule
 from game.physical_object import PhysicalObject
+from module import AbstractModule
 
 
 class Cannon(AbstractModule):
@@ -22,13 +22,17 @@ class Cannon(AbstractModule):
         self._missiles.append(Missile(pos, speed, display=self._display))
         self._pos = Vector2(pos)
 
+    @property
+    def missiles(self):
+        return self._missiles
+
     def update(self, space_pos, space_head):
         if self.started():
             pos = self._calc_position(space_pos, space_head)
             if len(self._missiles) == 0:
                 self._add_missile(pos, space_head)
             else:
-                distance = pos.distance_to(self._missiles[-1].get_position())
+                distance = pos.distance_to(self._missiles[-1].position)
                 if distance > self._frequency:
                     if min(self._display.get_size()) - distance > self._frequency:
                         self._add_missile(pos, space_head)
