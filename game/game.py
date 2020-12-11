@@ -3,9 +3,9 @@ import configparser
 
 from .background import Background
 from .display import Display
+from game.broken_display import Display
 from .state import State
 from pygame.math import Vector2
-
 
 
 class Game:
@@ -22,7 +22,7 @@ class Game:
         config.read('config.ini')
         self.state = State.MENU
         self.display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
-        self.background = Background(display=self.display.window)
+        self.background = Background(display=self.display)
 
     @staticmethod
     def is_mouse_on(x_centered,y_centered,x_size,y_size,mx,my):
@@ -62,16 +62,16 @@ class Game:
         mx, my = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()[0]
         x_size, y_size = 500, 300
-        x_centered = self.display.size[0] / 2 - x_size / 2
-        y_centered = self.display.size[1] / 2 - y_size / 2
+        x_centered = self.display.get_width() / 2 - x_size / 2
+        y_centered = self.display.get_height() / 2 - y_size / 2
         self.display.draw_rect(size=Vector2(x_size, y_size), color=(100,97,0, self.alpha)
                                , pos=Vector2(x_centered, y_centered),fill=False)
-        self.display.draw_text("Space", pos=Vector2(self.display.size[0] / 2,self.display.size[1] / 2 ),
+        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2,self.display.get_height() / 2 ),
                                size=50,color=(100,74,0))
-        self.display.draw_text("Space", pos=Vector2(self.display.size[0] / 2-2,
-                                                    self.display.size[1] / 2-5), size=50)
-        self.display.draw_text("click to start", pos=Vector2(self.display.size[0] / 2,
-                                                             self.display.size[1] / 2+0.1*self.display.size[1]), size=15)
+        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2-2,
+                                                    self.display.get_height() / 2-5), size=50)
+        self.display.draw_text("click to start", pos=Vector2(self.display.get_width() / 2,
+                                                             self.display.get_height() / 2+0.1*self.display.get_height()), size=15)
         if Game.is_mouse_on(x_centered, y_centered, x_size, y_size, mx, my) and mouse_pressed:
             self.state = State.GAME
             self.menu_sound.stop()
@@ -89,7 +89,8 @@ class Game:
                 pass
             elif self.state == State.END:
                 pass
-            self.display.update_frame()
+
+            pygame.display.flip()
 
     def handle_keys(self):
         """Функция, взаимодействующая с клавиатурой"""
@@ -99,7 +100,7 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F12:  # полноэкранный
-                    self.display.full_screen()
+                    self.display.toggle_fullscreen()
                 if event.key == pygame.K_LEFT:
                     print("Влево")
                 if event.key == pygame.K_RIGHT:
@@ -110,17 +111,3 @@ class Game:
                     print("Выстрел")
             if event.type == pygame.QUIT:  # выход
                 self.finished = True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
