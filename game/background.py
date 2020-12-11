@@ -1,8 +1,7 @@
 import pygame as pg
 import random
 from pygame.math import Vector2
-from PIL import Image
-from pillow_lut import rgb_color_enhance
+from PIL import Image, ImageEnhance
 
 from game.physical_object import PhysicalObject
 
@@ -41,8 +40,9 @@ class Asteroid(PhysicalObject):
         self._speed = Vector2(random.random(), 0)
 
         image = Image.open("../../data/ast2.png").resize(self._size)
-        lut = rgb_color_enhance(4, exposure=-1, contrast=-0.2, saturation=-0.1)
-        image = image.filter(lut)
+        image = ImageEnhance.Sharpness(image).enhance(0.4)
+        image = ImageEnhance.Brightness(image).enhance(0.7)
+        image = ImageEnhance.Contrast(image).enhance(0.85)
         color_key = image.getpixel((0, 0))
 
         self.image = pg.image.fromstring(image.tobytes(), image.size, image.mode).convert()
