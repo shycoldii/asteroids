@@ -2,7 +2,7 @@ import pygame as pg
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
-from Game.physical_object import PhysicalObject
+from game.physical_object import PhysicalObject
 
 
 class Background:
@@ -16,6 +16,8 @@ class Background:
 
     def update(self):
         if self._size != self._display.get_size():
+            print(self._size)
+            print(self._display.get_size())
             self.image = pg.transform.scale(self.image, self._display.get_size())
             self._size = self._display.get_size()
         for asteroid in self._asteroids:
@@ -53,7 +55,7 @@ class Asteroid(PhysicalObject):
         self.rect = self.image.get_rect(center=self._pos)
 
     def _move(self):
-        self._pos -= self._speed
+        self._pos += self._speed
         super()._move()
 
     def update(self):
