@@ -119,7 +119,6 @@ class Game:
                 pass
             self.display.update_frame()
 
-
     def handle_keys(self):
         """Функция, взаимодействующая с клавиатурой"""
         keys = pygame.key.get_pressed()
