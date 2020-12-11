@@ -2,8 +2,8 @@ import pygame as pg
 import math
 from pygame.math import Vector2
 
-from game.physical_object import PhysicalObject
-from module import AbstractModule
+from Game.physical_object import PhysicalObject
+from .module import AbstractModule
 
 
 class JetEngine(AbstractModule):

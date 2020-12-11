@@ -2,14 +2,15 @@ import pygame
 import configparser
 
 from .background import Background
+from .asteroid import Enemies
 from .display import Display
-from game.broken_display import Display
+from Game.broken_display import Display
 from .state import State
 from pygame.math import Vector2
 
 
 class Game:
-    alpha,reverse = 255,False #параметры для рамочки
+    alpha, reverse = 255, False  # параметры для рамочки
 
     pygame.mixer.init()
     menu_sound = pygame.mixer.Sound("data/menu.mp3")
@@ -23,9 +24,10 @@ class Game:
         self.state = State.MENU
         self.display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
         self.background = Background(display=self.display)
+        self.emenies = Enemies(display=self.display)
 
     @staticmethod
-    def is_mouse_on(x_centered,y_centered,x_size,y_size,mx,my):
+    def is_mouse_on(x_centered, y_centered, x_size, y_size, mx, my):
         """
         :param x_centered: координата х централизации (с учетом прямоугольника)
         :param y_centered: координата у централизации (с учетом прямоугольника)
@@ -35,7 +37,7 @@ class Game:
         :param my: координата мышки у
         :return: True, если мышь находится внутри области
         """
-        if x_centered <= mx <= x_centered+x_size and y_centered <= my <= y_centered+y_size:
+        if x_centered <= mx <= x_centered + x_size and y_centered <= my <= y_centered + y_size:
             return True
         return False
 
@@ -45,9 +47,9 @@ class Game:
         :return: None
         """
         if self.reverse:
-            self.alpha+=0.5
+            self.alpha += 0.5
         else:
-            self.alpha-=0.5
+            self.alpha -= 0.5
         if self.alpha == 0:
             self.reverse = True
         if self.alpha == 255:
@@ -64,14 +66,15 @@ class Game:
         x_size, y_size = 500, 300
         x_centered = self.display.get_width() / 2 - x_size / 2
         y_centered = self.display.get_height() / 2 - y_size / 2
-        self.display.draw_rect(size=Vector2(x_size, y_size), color=(100,97,0, self.alpha)
-                               , pos=Vector2(x_centered, y_centered),fill=False)
-        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2,self.display.get_height() / 2 ),
-                               size=50,color=(100,74,0))
-        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2-2,
-                                                    self.display.get_height() / 2-5), size=50)
+        self.display.draw_rect(size=Vector2(x_size, y_size), color=(100, 97, 0, self.alpha)
+                               , pos=Vector2(x_centered, y_centered), fill=False)
+        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2, self.display.get_height() / 2),
+                               size=50, color=(100, 74, 0))
+        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2 - 2,
+                                                    self.display.get_height() / 2 - 5), size=50)
         self.display.draw_text("click to start", pos=Vector2(self.display.get_width() / 2,
-                                                             self.display.get_height() / 2+0.1*self.display.get_height()), size=15)
+                                                             self.display.get_height() / 2 + 0.1 * self.display.get_height()),
+                               size=15)
         if Game.is_mouse_on(x_centered, y_centered, x_size, y_size, mx, my) and mouse_pressed:
             self.state = State.GAME
             self.menu_sound.stop()
@@ -86,7 +89,8 @@ class Game:
             if self.state == State.MENU:
                 self.apply_menu()
             elif self.state == State.GAME:
-                pass
+                self.emenies.draw()
+                self.emenies.update()
             elif self.state == State.END:
                 pass
 

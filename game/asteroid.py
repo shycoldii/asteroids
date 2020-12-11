@@ -1,73 +1,59 @@
-import pygame
+import pygame as pg
 import random
-import sys
-import time
-
-W = 800  # ось x
-H = 600  # ось y
-SIZE = 55  # размер картинки
-MAX = 15  # максимальное количество астероидов на экране
+from pygame.math import Vector2
+from PIL import Image, ImageEnhance
+from Game.physical_object import PhysicalObject
+from math import sin, cos
 
 
-class Asteroid:
+class Enemies:
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.asteroid = pygame.image.load('../data/ast1.png').convert_alpha()  # передаем картинку
-        self.asteroid = pygame.transform.scale(self.asteroid, (SIZE, SIZE))  # задаем размер картинке
+    def __init__(self, display):
+        self._display = display
+        self._size = self._display.get_size()
+        self._asteroids = [Asteroid(display=self._display) for _ in range(10)]
 
-    # движение астероидов
-    def move(self):
-        self.speed = random.randrange(1, 2)  # задаем скорость
-        self.y += self.speed
+    def update(self):
+        if self._size != self._display.get_size():
+            self._size = self._display.get_size()
+        for asteroid in self._asteroids:
+            asteroid.update()
 
-        if self.y > H:
-            self.y = (0 - SIZE)  # выход за рамки
-
-        place = random.randrange(1, 3)
-        if place == 1:  # движение вправо
-            self.x += 1
-            if self.x > W:
-                self.x = (0 - SIZE)
-
-        elif place == 2:  # движение влево
-            self.x -= 1
-            if self.x < (0 - SIZE):
-                self.x = W
-
-    # рисуем астероиды на экране
-    def showing(self):
-        screen.blit(self.asteroid, (self.x, self.y))
+    def draw(self, surface=None):
+        for asteroid in self._asteroids:
+            asteroid.draw(surface)
 
 
-all_asteroid = []
+class Asteroid(PhysicalObject):
+    degrees = [i/10 for i in range(63)]
 
-# создание астеройдов в рандомных местах(случайное положение x, y)
+    def __init__(self, pos=None, display=None, *groups):
+        pos = pos or (random.randint(0, display.get_width()), random.randint(0, display.get_height()))
+        super().__init__(pos, display, *groups)
 
+        self._display_size = self._display.get_size()
 
-def init_aster(MAX, all_asteroid):
+        self._size = (random.randint(35, 55), ) * 2
+        self._speed = Vector2(0.5, 0.5)
+        self._angle = random.choice(Asteroid.degrees)
 
-    for _ in range(1, MAX):
-        x = random.randrange(0, W)
-        y = random.randrange(0, H)
-        all_asteroid.append(Asteroid(x, y))
+        image = Image.open("./data/ast1.png").resize(self._size)
+        image = ImageEnhance.Sharpness(image).enhance(0.4)
+        image = ImageEnhance.Brightness(image).enhance(0.7)
+        image = ImageEnhance.Contrast(image).enhance(0.85)
+        color_key = image.getpixel((0, 0))
 
+        self.image = pg.image.fromstring(image.tobytes(), image.size, image.mode).convert()
+        self.image.set_colorkey(color_key)
+        self.rect = self.image.get_rect(center=self._pos)
 
-pygame.init()
-screen = pygame.display.set_mode((W, H))
-init_aster(MAX, all_asteroid)
+    def _move(self):
+        self._pos.x += self._speed.x * cos(self._angle)
+        self._pos.y += self._speed.y * sin(self._angle)
+        super()._move()
 
-game = True
-# при нажатии любой кнопки игра прекращается
-while game:
-    screen.fill((0, 51, 102))  # закрашиваем, чтобы не оставалось следов передвижения
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            sys.exit()
-    for i in all_asteroid:
-        i.move()
-        i.showing()
-
-    time.sleep(0.001)
-    pygame.display.flip()
+    def update(self):
+        super().update()
+        if self._size != self._display.get_size():
+            self._size = self._display.get_size()
+            self.rect = self.image.get_rect(center=(self._size[0], self._size[1]))

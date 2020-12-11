@@ -1,4 +1,3 @@
-from game.display import Display
 from pygame.math import Vector2
 import time
 import random

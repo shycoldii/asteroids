@@ -1,8 +1,8 @@
 import pygame as pg
 
-from spaceship import Spaceship
-from game.background import Background
-from game.broken_display import Display
+from .spaceship import Spaceship
+from Game.background import Background
+from Game.broken_display import Display
 
 WIDTH = 900
 HEIGHT = 675

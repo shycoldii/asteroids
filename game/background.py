@@ -2,7 +2,7 @@ import pygame as pg
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
-from game.physical_object import PhysicalObject
+from Game.physical_object import PhysicalObject
 
 
 class Background:
@@ -53,7 +53,7 @@ class Asteroid(PhysicalObject):
         self.rect = self.image.get_rect(center=self._pos)
 
     def _move(self):
-        self._pos += self._speed
+        self._pos -= self._speed
         super()._move()
 
     def update(self):

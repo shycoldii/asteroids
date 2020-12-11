@@ -2,9 +2,9 @@ import pygame as pg
 import math
 from pygame.math import Vector2
 
-from game.physical_object import PhysicalObject
-from jet_engine import JetEngine
-from cannon import Cannon
+from Game.physical_object import PhysicalObject
+from .jet_engine import JetEngine
+from .cannon import Cannon
 
 
 class Spaceship(PhysicalObject):
