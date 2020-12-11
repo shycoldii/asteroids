@@ -17,7 +17,7 @@ class Background:
     def update(self):
         if self._size != self._display.get_size():
             self.image = pg.transform.scale(self.image, self._display.get_size())
-            self._size = self._display.get_size
+            self._size = self._display.get_size()
         for asteroid in self._asteroids:
             asteroid.update()
 
