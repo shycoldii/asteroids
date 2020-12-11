@@ -3,12 +3,8 @@ import pygame as pg
 from spaceship import Spaceship
 from game.background import Background
 
-<<<<<<< HEAD:Game/test_spaceship.py
-WIDTH = HEIGHT = 600
-=======
 WIDTH = 900
 HEIGHT = 675
->>>>>>> main:game/spaceship/test_spaceship.py
 FPS = 60
 
 pg.init()
@@ -17,12 +13,8 @@ clock = pg.time.Clock()
 
 
 # ========== setup ========== #
-<<<<<<< HEAD:Game/test_spaceship.py
-spaceship = Spaceship(display)
-=======
 spaceship = Spaceship(display=display)
 background = Background(display=display)
->>>>>>> main:game/spaceship/test_spaceship.py
 # =========================== #
 
 
