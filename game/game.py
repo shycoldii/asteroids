@@ -3,7 +3,7 @@ import configparser
 
 from .background import Background
 from .display import Display
-from game.broken_display import Display
+from game.display import Display
 from .state import State
 from pygame.math import Vector2
 
