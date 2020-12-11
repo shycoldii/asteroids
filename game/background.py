@@ -37,6 +37,8 @@ class Asteroid(PhysicalObject):
         pos = pos or (random.randint(0, display.get_width()), random.randint(0, display.get_height()))
         super().__init__(pos, display, *groups)
 
+        self._display_size = self._display.get_size()
+
         self._size = (random.randint(4, 21), ) * 2
         self._speed = Vector2(random.random(), 0)
 
@@ -53,3 +55,9 @@ class Asteroid(PhysicalObject):
     def _move(self):
         self._pos += self._speed
         super()._move()
+
+    def update(self):
+        super().update()
+        if self._size != self._display.get_size():
+            self._size = self._display.get_size()
+            self.rect = self.image.get_rect(center=(self._size[0], self._size[1]))
