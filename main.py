@@ -1,8 +1,6 @@
 import configparser
 import pygame
-
 from game.game import Game
-
 
 def initialization():
     """Инициализация нужных файлов игры"""

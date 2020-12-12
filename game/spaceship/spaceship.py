@@ -19,7 +19,7 @@ class Spaceship(PhysicalObject):
         # self._master_image = pg.transform.scale(pg.image.load("/Users/13polbr/Desktop/asteroids/data/spaceship.png").convert_alpha(), (30, 30))
 
         # test_spaceship
-        self._master_image = pg.transform.scale(pg.image.load("../../data/spaceship.png").convert_alpha(), (30, 30))
+        self._master_image = pg.transform.scale(pg.image.load("./data/spaceship3.png").convert_alpha(), (60, 60))
 
         # =======================================
 
@@ -42,7 +42,6 @@ class Spaceship(PhysicalObject):
 
     def _move(self):
         self._pos += self._speed
-        # self._speed *= 0.85
         self._speed *= 0.98
         super()._move()
 

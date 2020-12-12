@@ -2,7 +2,7 @@ import pygame as pg
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
-from Game.physical_object import PhysicalObject
+from game.physical_object import PhysicalObject
 from math import sin, cos
 import time
 
@@ -44,11 +44,11 @@ class Asteroid(PhysicalObject):
 
         self._display_size = self._display.get_size()
 
-        self._size = (random.randint(35, 55),) * 2
+        self._size = (random.randint(45, 80),) * 2
         self._speed = Vector2(0.5, 0.5)  # скорость астероидов
         self._angle = random.choice(Asteroid.degrees)  # выбираем рандомный угол
 
-        image = Image.open("./data/ast1.png").resize(self._size)
+        image = Image.open("./data/ast4.png").resize(self._size)
         image = ImageEnhance.Sharpness(image).enhance(0.4)
         image = ImageEnhance.Brightness(image).enhance(0.7)
         image = ImageEnhance.Contrast(image).enhance(0.85)
@@ -59,13 +59,7 @@ class Asteroid(PhysicalObject):
         self.rect = self.image.get_rect(center=self._pos)
 
     def _move(self):
-        # прибавляемк  скорости ее проекцию на оси в зависимости от угла
+        # прибавляем к скорости ее проекцию на оси в зависимости от угла
         self._pos.x += self._speed.x * cos(self._angle)
         self._pos.y += self._speed.y * sin(self._angle)
         super()._move()
-
-    def update(self):
-        super().update()
-        if self._size != self._display.get_size():
-            self._size = self._display.get_size()
-            self.rect = self.image.get_rect(center=(self._size[0], self._size[1]))
