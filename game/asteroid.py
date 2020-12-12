@@ -1,4 +1,5 @@
 import pygame as pg
+from pygame.sprite import Group
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
@@ -12,14 +13,14 @@ class Enemies:
     def __init__(self, display):
         self._display = display
         self._size = self._display.get_size()
-        self._asteroids = [Asteroid(display=self._display)]
+        self._asteroids = Group(Asteroid(display=self._display))
         self.check_time = time.time()  # начало времени отсчета для постепенного спавна астероидов
 
     def update(self):
         if self._size != self._display.get_size():
             self._size = self._display.get_size()
         if time.time() - self.check_time > 1 and len(self._asteroids) <= 10:  # проверяем прошедшее время
-            self._asteroids.append(Asteroid(display=self._display))
+            self._asteroids.add(Asteroid(display=self._display))
             self.check_time = time.time()  # перезаписываем время
         for asteroid in self._asteroids:
             asteroid.update()
@@ -27,6 +28,10 @@ class Enemies:
     def draw(self, surface=None):
         for asteroid in self._asteroids:
             asteroid.draw(surface)
+
+    @property
+    def asteroids(self):
+        return self._asteroids
 
 
 class Asteroid(PhysicalObject):
