@@ -8,16 +8,11 @@ from .spaceship.spaceship import Spaceship
 
 
 class Map:
-    alpha,reverse = 255,False
     def __init__(self, display):
-        pygame.mixer.init()
         self.space_sound = pygame.mixer.Sound("data/space.mp3")
-        self.menu_sound =  pygame.mixer.Sound("data/menu.mp3")
-        self.menu_sound.play(-1)
         self.display = display
         self.spaceship = Spaceship(display=self.display)
         self.enemies = Enemies(display=self.display)
-        self.background = Background(display=self.display)
 
         self.end = None
         self.first_spawn = True
@@ -45,13 +40,6 @@ class Map:
         self.score = 0
         self.init_lives()
 
-    def update_menu(self):
-        """
-        Обновление состояния MENU
-        :return: None
-        """
-        self.change_alpha()
-        self.background.update()
 
     def update_game(self):
         """
@@ -63,7 +51,6 @@ class Map:
         # проверяем хп юзера, отнимаем при столкновении с астероидом
         if self.first_spawn:
             self.first_spawn = False
-        self.background.update()
         self.spaceship.update()
         self.enemies.update()
         if self.lives != 0:
@@ -73,60 +60,11 @@ class Map:
         else:
                 self.end = True
 
-    @staticmethod
-    def is_mouse_on(x_centered, y_centered, x_size, y_size, mx, my):
-        """
-        :param x_centered: координата х централизации (с учетом прямоугольника)
-        :param y_centered: координата у централизации (с учетом прямоугольника)
-        :param x_size: размер объекта (прямоугольника)
-        :param y_size: размер объекта (прямоугольника)
-        :param mx: координата мышки х
-        :param my: координата мышки у
-        :return: True, если мышь находится внутри области
-        """
-        if x_centered <= mx <= x_centered + x_size and y_centered <= my <= y_centered + y_size:
-            return True
-        return False
-    def change_alpha(self):
-        """
-                Вспомогательная функция для изменения видимости рамки в начале игры
-                :return: None
-                """
-        if self.reverse:
-            self.alpha += 0.5
-        else:
-            self.alpha -= 0.5
-        if self.alpha == 0:
-            self.reverse = True
-        if self.alpha == 255:
-            self.reverse = False
-
-    def draw_menu(self,x_size,y_size,x_centered,y_centered):
-        """
-        Отображение на экране состояния МЕНЮ
-        :param x_size: вспомогательный параметр лого
-        :param y_size: вспомогательный параметр лого
-        :param x_centered: вспомогательный параметр лого
-        :param y_centered: вспомогательный параметр лого
-        :return: None
-        """
-        self.background.draw()
-        self.display.draw_rect(size=Vector2(x_size, y_size), color=(100, 97, 0, self.alpha)
-                               , pos=Vector2(x_centered, y_centered), fill=False)
-        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2, self.display.get_height() / 2),
-                               size=50, color=(100, 74, 0))
-        self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2 - 2,
-                                                    self.display.get_height() / 2 - 5), size=50)
-        self.display.draw_text("click to start", pos=Vector2(self.display.get_width() / 2,
-                                                             self.display.get_height() / 2 + 0.1 * self.display.get_height()),
-                               size=15)
-
     def draw_game(self):
         """
         Отображение состояния GAME
         :return: None
         """
-        self.background.draw()
         self.spaceship.draw()
         self.enemies.draw()
         self.display_lives()
