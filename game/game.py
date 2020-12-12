@@ -58,9 +58,14 @@ class Game:
         """
         self.map.update_game()
         self.map.draw_game()
+        if self.map.end:
+            self.apply_end()
+
 
     def apply_end(self):
-         pass
+        self.map.update_game()
+        self.map.draw_game()
+        pass
 
     def run(self):
         """Начало игры"""

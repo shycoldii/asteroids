@@ -53,7 +53,7 @@ class Display:
             self.resize(self._default_size)
 
     def draw(self, obj):
-        obj.draw(self._display)
+        obj.draw()
 
     def draw_img(self, img, size, pos):
         """

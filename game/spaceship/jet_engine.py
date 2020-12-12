@@ -35,7 +35,7 @@ class JetEngine(AbstractModule):
 
     def draw(self):
         for p in self._particles:
-            p.draw(self._display)
+            p.draw()
 
 
 class Particle(PhysicalObject):

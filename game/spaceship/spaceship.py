@@ -37,7 +37,7 @@ class Spaceship(PhysicalObject):
         self._jet_engine = JetEngine(self._pos, self._master_image.get_size(), self._head, self._display)
         self._cannon = Cannon(self._pos, self._master_image.get_size(), self._head, self._display)
 
-        self._health = 2
+        self._health = 3
         self.score = 0  # TODO: убрать
 
     def _move(self):
@@ -105,3 +105,7 @@ class Spaceship(PhysicalObject):
         super().draw(surface)
         self._jet_engine.draw()
         self._cannon.draw()
+
+    @property
+    def health(self):
+        return self._health
