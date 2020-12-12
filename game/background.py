@@ -2,7 +2,7 @@ import pygame as pg
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
-from Game.physical_object import PhysicalObject
+from game.physical_object import PhysicalObject
 
 
 class Background:
@@ -10,7 +10,17 @@ class Background:
     def __init__(self, display):
         self._display = display
         self._size = self._display.get_size()
-        self.image = pg.transform.scale(pg.image.load("/Users/13polbr/Desktop/asteroids/data/background.jpg").convert(), self._size)
+
+        # =======================================
+
+        # Полина
+        # self.image = pg.transform.scale(pg.image.load("/Users/13polbr/Desktop/asteroids/data/background.jpg").convert(), self._size)
+
+        # test_spaceship
+        self.image = pg.transform.scale(pg.image.load("../../data/background.jpg").convert(), self._size)
+
+        # =======================================
+
         self.rect = self.image.get_rect(center=(self._size[0] / 2, self._size[1] / 2))
         self._asteroids = [Asteroid(display=self._display) for _ in range(22)]
 
@@ -44,7 +54,16 @@ class Asteroid(PhysicalObject):
         self._size = (random.randint(4, 15),) * 2
         self._speed = Vector2(random.random(), 0)
 
-        image = Image.open("/Users/13polbr/Desktop/asteroids/data/ast2.png").resize(self._size)
+        # =======================================
+
+        # Полина
+        # image = Image.open("/Users/13polbr/Desktop/asteroids/data/ast2.png").resize(self._size)
+
+        # test_spaceship
+        image = Image.open("../../data/ast2.png").resize(self._size)
+
+        # =======================================
+
         image = ImageEnhance.Sharpness(image).enhance(0.4)
         image = ImageEnhance.Brightness(image).enhance(0.7)
         image = ImageEnhance.Contrast(image).enhance(0.85)
