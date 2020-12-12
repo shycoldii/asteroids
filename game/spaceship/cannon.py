@@ -2,8 +2,8 @@ import pygame as pg
 import math
 from pygame.math import Vector2
 
-from Game.physical_object import PhysicalObject
-from .module import AbstractModule
+from game.physical_object import PhysicalObject
+from game.spaceship.module import AbstractModule
 
 
 class Cannon(AbstractModule):

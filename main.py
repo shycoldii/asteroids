@@ -1,7 +1,7 @@
 import configparser
 import pygame
 
-from Game.game import Game
+from game.game import Game
 
 
 def initialization():
