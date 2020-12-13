@@ -1,3 +1,4 @@
+import pygame
 import pygame as pg
 import math
 from pygame.math import Vector2
@@ -8,7 +9,9 @@ from game.base.module import AbstractModule
 
 
 class Cannon(AbstractModule):
-
+    pygame.mixer.init()
+    missile_sound = pygame.mixer.Sound("data/missile.mp3")
+    missile_sound.set_volume(missile_sound.get_volume()-0.7)
     def __init__(self, display, space_pos, space_size, space_head):
         super(Cannon, self).__init__(display, space_pos, space_size, space_head)
 
@@ -19,9 +22,11 @@ class Cannon(AbstractModule):
         return space_pos - Vector2(0, self._space_size[1] / 2).rotate(space_head % 360)
 
     def _add_missile(self, pos, space_head):
+        self.missile_sound.play()
         speed = Vector2(math.sin(math.radians(space_head)), -math.cos(math.radians(space_head)))
         self._missiles.add(Missile(self._display, pos, speed))
         self._pos = Vector2(pos)
+
 
     @property
     def missiles(self):

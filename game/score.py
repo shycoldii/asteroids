@@ -11,7 +11,7 @@ class Score(StaticObject):
 
         # TEMP
         try:
-            self._font = Font("../../data/Astrolab.ttf", 20)
+            self._font = Font("./data/Astrolab.ttf", 20)
         except Exception:
             try:
                 self._font = Font("...", 20)  # свои пути к файлам сюда

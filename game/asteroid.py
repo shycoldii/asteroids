@@ -1,3 +1,5 @@
+import configparser
+
 import pygame as pg
 from pygame.sprite import Group
 import random
@@ -38,8 +40,8 @@ class Asteroid(DynamicObject):
     degrees = [i / 10 for i in range(63)]  # спискок с градусами в радианах для старта в произвольном направлении
 
     def __init__(self, display, pos=None, *groups):
-        #  точку спавна выбираем не в середине
-        #  TODO: сделать мониторинг, чтобы не спавнились на игроке
+        config = configparser.ConfigParser()
+        config.read('config.ini')
         pos = pos or (random.choice(
             [random.randint(50, display.get_width() // 2 - 100),
              random.randint(display.get_width() // 2 + 100, display.get_width()-50)]), random.choice(
@@ -48,9 +50,10 @@ class Asteroid(DynamicObject):
         super().__init__(display, pos, *groups)
 
         self._display_size = self._display.get_size()
-
-        self._size = (random.randint(45, 80),) * 2
-        self._speed = Vector2(0.5, 0.5)  # скорость астероидов
+        size = int(config["Objects"]["min_ast"]), int(config["Objects"]["max_ast"])
+        self._size = (random.randint(size[0], size[1]),) * 2
+        speed = float(config["Objects"]["speed_ast"])
+        self._speed = Vector2(speed, speed)  # скорость астероидов
         self._angle = random.choice(Asteroid.degrees)  # выбираем рандомный угол
 
         image = Image.open("./data/ast4.png").resize(self._size)

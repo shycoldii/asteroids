@@ -1,3 +1,5 @@
+import configparser
+
 import pygame as pg
 import math
 from pygame.math import Vector2
@@ -10,6 +12,8 @@ from game.spaceship.cannon import Cannon
 class Spaceship(DynamicObject):
 
     def __init__(self, display, pos=None, *groups):
+        config = configparser.ConfigParser()
+        config.read('config.ini')
         pos = pos or Vector2(display.get_width() / 2, display.get_height() / 2)
         super().__init__(display, pos, *groups)
 
@@ -40,7 +44,6 @@ class Spaceship(DynamicObject):
         self._jet_engine = JetEngine(self._display, self._pos, self._master_image.get_size(), self._head)
         self._cannon = Cannon(self._display, self._pos, self._master_image.get_size(), self._head)
         self._hp = Health(display)
-
         self._reset_animation()
 
     def _move(self):

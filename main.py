@@ -1,4 +1,3 @@
-import configparser
 import pygame
 from game.game import Game
 
@@ -9,8 +8,6 @@ def initialization():
     pygame.display.set_caption('SPACE')
 
 if __name__ == "__main__":
-    config = configparser.ConfigParser()
-    config.read('config.ini')
     initialization()
     game = Game()
     game.run()
