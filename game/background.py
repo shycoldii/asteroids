@@ -1,3 +1,5 @@
+import configparser
+
 import pygame as pg
 import random
 from pygame.math import Vector2
@@ -8,6 +10,8 @@ from game.base.base import DynamicObject, StaticObject
 class Background(StaticObject):
 
     def __init__(self, display):
+        config = configparser.ConfigParser()
+        config.read('config.ini')
         super().__init__(display)
         self._size = self._display.get_size()
 
@@ -23,9 +27,9 @@ class Background(StaticObject):
                 self.image = pg.transform.scale(pg.image.load("../../data/background.jpg").convert(), self._size)
 
         # =======================================
-
+        nums = int(config["Objects"]["n_bcg_ast"])
         self.rect = self.image.get_rect(center=(self._size[0] / 2, self._size[1] / 2))
-        self._asteroids = [Asteroid(display=self._display) for _ in range(40)]
+        self._asteroids = [Asteroid(display=self._display) for _ in range(nums)]
 
     def update(self):
         if self._size != self._display.get_size():
@@ -43,15 +47,15 @@ class Background(StaticObject):
 
 
 class Asteroid(DynamicObject):
-
     def __init__(self, display, pos=None, *groups):
+        config = configparser.ConfigParser()
+        config.read('config.ini')
         pos = pos or (random.randint(0, display.get_full_size()[0]),
                       random.randint(0, display.get_full_size()[1]))
         super().__init__(display, pos, *groups)
-
-        # self._display_size = self._display.get_size()
-
-        self._size = (random.randint(4, 15),) * 2
+        min_ast = int(config["Objects"]["min_bcg_ast"])
+        max_ast = int(config["Objects"]["min_bcg_ast"])
+        self._size = (random.randint(min_ast, max_ast),) * 2
         self._speed = Vector2(random.random(), 0)
 
         # =======================================
