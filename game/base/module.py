@@ -1,11 +1,12 @@
-from abc import ABC, abstractmethod
 from pygame.math import Vector2
 
+from game.base.base import BasicObject
 
-class AbstractModule(ABC):
 
-    def __init__(self, space_pos, space_size, space_head, display):
-        self._display = display
+class AbstractModule(BasicObject):
+
+    def __init__(self, display, space_pos, space_size, space_head):
+        super().__init__(display)
         self._space_size = space_size
         self._pos = self._calc_position(space_pos, space_head)
         self._started = False
@@ -23,14 +24,11 @@ class AbstractModule(ABC):
     def position(self):
         return Vector2(self._pos)
 
-    @abstractmethod
     def _calc_position(self, space_pos, space_head):
         pass
 
-    @abstractmethod
     def update(self, space_pos, space_head):
         pass
 
-    @abstractmethod
-    def draw(self):
+    def draw(self, surface):
         pass

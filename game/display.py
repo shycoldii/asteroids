@@ -25,6 +25,9 @@ class Display:
     def get_size(self):
         return self._size
 
+    def get_full_size(self):
+        return self._full_size
+
     def get_surface(self):
         return self._display.copy()
 

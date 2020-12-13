@@ -3,7 +3,7 @@ from pygame.sprite import Group
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
-from game.physical_object import PhysicalObject
+from game.base.base import DynamicObject
 from math import sin, cos
 import time
 
@@ -13,7 +13,7 @@ class Enemies:
     def __init__(self, display):
         self._display = display
         self._size = self._display.get_size()
-        self._asteroids = Group(Asteroid(display=self._display))
+        self._asteroids = Group(Asteroid(self._display))
         self.check_time = time.time()  # начало времени отсчета для постепенного спавна астероидов
 
     def update(self):
@@ -34,10 +34,10 @@ class Enemies:
         return self._asteroids
 
 
-class Asteroid(PhysicalObject):
+class Asteroid(DynamicObject):
     degrees = [i / 10 for i in range(63)]  # спискок с градусами в радианах для старта в произвольном направлении
 
-    def __init__(self, pos=None, display=None, *groups):
+    def __init__(self, display, pos=None, *groups):
         #  точку спавна выбираем не в середине
         #  TODO: сделать мониторинг, чтобы не спавнились на игроке
         pos = pos or (random.choice(
@@ -45,7 +45,7 @@ class Asteroid(PhysicalObject):
              random.randint(display.get_width() // 2 + 100, display.get_width()-50)]), random.choice(
             [random.randint(50, display.get_height() // 2 - 100),
              random.randint(display.get_height() // 2 + 100, display.get_height()-50)]))
-        super().__init__(pos, display, *groups)
+        super().__init__(display, pos, *groups)
 
         self._display_size = self._display.get_size()
 

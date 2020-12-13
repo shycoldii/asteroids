@@ -2,22 +2,25 @@ import pygame as pg
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
-from game.physical_object import PhysicalObject
+from game.base.base import DynamicObject, StaticObject
 
 
-class Background:
+class Background(StaticObject):
 
     def __init__(self, display):
-        self._display = display
+        super().__init__(display)
         self._size = self._display.get_size()
 
         # =======================================
 
-        # Полина
-        # self.image = pg.transform.scale(pg.image.load("/Users/13polbr/Desktop/asteroids/data/background.jpg").convert(), self._size)
-
-        # test_spaceship
-        self.image = pg.transform.scale(pg.image.load("./data/background.jpg").convert(), self._size)
+        try:
+            self.image = pg.transform.scale(pg.image.load("/Users/13polbr/Desktop/asteroids/data/background.jpg")
+                                            .convert(), self._size)
+        except Exception:
+            try:
+                self.image = pg.transform.scale(pg.image.load("./data/background.jpg").convert(), self._size)
+            except Exception:
+                self.image = pg.transform.scale(pg.image.load("../../data/background.jpg").convert(), self._size)
 
         # =======================================
 
@@ -28,26 +31,25 @@ class Background:
         if self._size != self._display.get_size():
             self.image = pg.transform.scale(self.image, self._display.get_size())
             self._size = self._display.get_size()
+
         for asteroid in self._asteroids:
             asteroid.update()
 
     def draw(self, surface=None):
-        if surface is not None:
-            surface.blit(self.image, self.rect)
-        elif self._display is not None:
-            self._display.blit(self.image, self.rect)
+        super().draw(surface)
 
         for asteroid in self._asteroids:
-            asteroid.draw(surface)
+            asteroid.draw()
 
 
-class Asteroid(PhysicalObject):
+class Asteroid(DynamicObject):
 
-    def __init__(self, pos=None, display=None, *groups):
-        pos = pos or (random.randint(0, display._full_size[0]), random.randint(0, display._full_size[1]))
-        super().__init__(pos, display, *groups)
+    def __init__(self, display, pos=None, *groups):
+        pos = pos or (random.randint(0, display.get_full_size()[0]),
+                      random.randint(0, display.get_full_size()[1]))
+        super().__init__(display, pos, *groups)
 
-        #self._display_size = self._display.get_size()
+        # self._display_size = self._display.get_size()
 
         self._size = (random.randint(4, 15),) * 2
         self._speed = Vector2(random.random(), 0)
@@ -55,14 +57,26 @@ class Asteroid(PhysicalObject):
         # =======================================
 
         # Полина
-        # image = Image.open("/Users/13polbr/Desktop/asteroids/data/ast2.png").resize(self._size)
+        # image_name = random.choice(["/Users/13polbr/Desktop/asteroids/data/ast5.png",
+        #                             "/Users/13polbr/Desktop/asteroids/data/ast3.png",
+        #                             "/Users/13polbr/Desktop/asteroids/data/ast1.png",
+        #                             "/Users/13polbr/Desktop/asteroids/data/ast4.png",
+        #                             "/Users/13polbr/Desktop/asteroids/data/ast2.png",
+        #                             "/Users/13polbr/Desktop/asteroids/data/ast6.png"])
+
+        # main
+        image_name = random.choice(["./data/ast5.png", "./data/ast3.png",
+                                    "./data/ast1.png", "./data/ast4.png",
+                                    "./data/ast2.png", "./data/ast6.png"])
 
         # test_spaceship
-        image_name = random.choice(["./data/ast5.png","./data/ast3.png",
-                                    "./data/ast1.png","./data/ast4.png","./data/ast2.png","./data/ast6.png"])
-        image = Image.open(image_name).resize(self._size)
+        # image_name = random.choice(["../../data/ast5.png", "../../data/ast3.png",
+        #                             "../../data/ast1.png", "../../data/ast4.png",
+        #                             "../../data/ast2.png", "../../data/ast6.png"])
 
         # =======================================
+
+        image = Image.open(image_name).resize(self._size)
 
         image = ImageEnhance.Sharpness(image).enhance(0.4)
         image = ImageEnhance.Brightness(image).enhance(0.7)
@@ -84,3 +98,8 @@ class Asteroid(PhysicalObject):
         elif self.rect.right < 0:
             self._pos.x = self._display.get_width()
         self.rect.center = self._pos
+
+    def update(self):
+        eps = self._size[1] / 2
+        if 0 - eps < self._pos.y < self._display.get_height() + eps:
+            super().update()

@@ -2,11 +2,26 @@ from pygame.sprite import Sprite
 from pygame.math import Vector2
 
 
-class PhysicalObject(Sprite):
+class BasicObject(Sprite):
 
-    def __init__(self, pos, display=None, *groups):
-        super(PhysicalObject, self).__init__(*groups)
+    def __init__(self, display=None, *groups):
         self._display = display
+        super().__init__(*groups)
+
+    def update(self):
+        pass
+
+    def draw(self, surface=None):
+        if surface is not None:
+            surface.blit(self.image, self.rect)
+        elif self._display is not None:
+            self._display.blit(self.image, self.rect)
+
+
+class DynamicObject(BasicObject):
+
+    def __init__(self, display, pos, *groups):
+        super().__init__(display, *groups)
         self._pos = Vector2(pos)
 
     def _toroidal_geometry(self):
@@ -27,12 +42,21 @@ class PhysicalObject(Sprite):
     def position(self):
         return Vector2(self._pos)
 
+    def on_collision(self):
+        pass
+
+    def on_event(self, event):
+        pass
+
     def update(self):
         self._move()
         self._toroidal_geometry()
 
-    def draw(self, surface=None):
-        if surface is not None:
-            surface.blit(self.image, self.rect)
-        elif self._display is not None:
-            self._display.blit(self.image, self.rect)
+
+class StaticObject(BasicObject):
+
+    def __init__(self, display, *groups):
+        super().__init__(display, *groups)
+
+    def update(self):
+        pass

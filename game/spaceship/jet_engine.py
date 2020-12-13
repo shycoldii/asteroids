@@ -2,14 +2,14 @@ import pygame as pg
 import math
 from pygame.math import Vector2
 
-from game.physical_object import PhysicalObject
-from game.spaceship.module import AbstractModule
+from game.base.base import DynamicObject
+from game.base.module import AbstractModule
 
 
 class JetEngine(AbstractModule):
 
-    def __init__(self, space_pos, space_size, space_head, display):
-        super(JetEngine, self).__init__(space_pos, space_size, space_head, display)
+    def __init__(self, display, space_pos, space_size, space_head):
+        super(JetEngine, self).__init__(display, space_pos, space_size, space_head)
 
         self._particles = []
         self._frequency = 15
@@ -19,7 +19,7 @@ class JetEngine(AbstractModule):
 
     def _add_particle(self, pos, space_head):
         speed = -1 * Vector2(math.sin(math.radians(space_head)), -math.cos(math.radians(space_head)))
-        self._particles.append(Particle(pos, speed, display=self._display))
+        self._particles.append(Particle(self._display, pos, speed))
         self._pos = Vector2(pos)
 
     def update(self, space_pos, space_head):
@@ -38,10 +38,10 @@ class JetEngine(AbstractModule):
             p.draw()
 
 
-class Particle(PhysicalObject):
+class Particle(DynamicObject):
 
-    def __init__(self, pos, speed, display=None, *groups):
-        super().__init__(pos, display, *groups)
+    def __init__(self, display, pos, speed, *groups):
+        super().__init__(display, pos, *groups)
 
         self._pos = Vector2(pos)
         self._radius = 2
