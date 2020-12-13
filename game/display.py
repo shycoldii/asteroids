@@ -16,6 +16,8 @@ class Display:
 
         self._fullscreen = False
 
+        self.ship_position = Vector2(width//2, height//2)
+
     def get_width(self):
         return self._size[0]
 
@@ -108,3 +110,9 @@ class Display:
         size = Vector2(text_surface.get_width(), text_surface.get_height())
         pos -= size // 2
         self._display.blit(text_surface, pos)
+
+    def set_ship_position(self, pos):
+        self.ship_position = pos
+
+    def get_ship_position(self):
+        return self.ship_position

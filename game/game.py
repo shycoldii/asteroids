@@ -12,7 +12,7 @@ from .map import Map
 class Game:
     clock = pygame.time.Clock()
     finished = False
-    alpha,reverse = 255,False
+    alpha, reverse = 255, False
     pygame.mixer.init()
     menu_sound = pygame.mixer.Sound("data/menu.mp3")
     menu_sound.play(-1)
@@ -69,9 +69,9 @@ class Game:
         if not self.trigger:
             self.trigger = True
             self.menu_sound.play(-1)
+        self.map.spaceship._hp.update()
         self.map.spaceship._hp.draw()
-        self.map.update_game()
-        self.map.draw_game()
+        self.map.score.draw()
         self.change_alpha()
         mx, my = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()[0]
