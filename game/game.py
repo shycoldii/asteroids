@@ -22,8 +22,8 @@ class Game:
         config.read('config.ini')
         self.state = State.MENU
         self.display = Display(int(config["Game"]["WINDOW_WIDTH"]), int(config["Game"]["WINDOW_HEIGHT"]))
-        self.background = Background(display=self.display)
-        self.map = Map(display=self.display)
+        self.background = Background(self.display)
+        self.map = Map(self.display)
         self.fps = 60
 
     def apply_menu(self):
@@ -92,10 +92,10 @@ class Game:
                 if event.key == pygame.K_F12:  # полноэкранный
                     self.display.toggle_fullscreen()
                 if self.state == State.GAME:
-                    self.map.spaceship.on_key_press(event.key)
+                    self.map.spaceship.on_event(event)
             elif event.type == pygame.KEYUP:
                     if self.state == State.GAME:
-                        self.map.spaceship.on_key_release(event.key)
+                        self.map.spaceship.on_event(event)
             if event.type == pygame.QUIT:  # выход
                 self.finished = True
 

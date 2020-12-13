@@ -1,6 +1,7 @@
 import pygame as pg
 
 from game.spaceship.spaceship import Spaceship
+from game.score import Score
 from game.background import Background
 from game.display import Display
 
@@ -14,25 +15,34 @@ clock = pg.time.Clock()
 
 # ========== setup ========== #
 display = Display(900, 675)
-spaceship = Spaceship(display=display)
-background = Background(display=display)
+score = Score(display)
+spaceship = Spaceship(display)
+background = Background(display)
 # =========================== #
 
 
 def on_execute():
     while True:
-        display.fill((10, 10, 10))
+        background.draw(display)
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit(0)
 
+            spaceship.on_event(event)
+
             if event.type == pg.KEYDOWN:
-                spaceship.on_key_press(event.key)
+                score.update()
+
+                if event.key == pg.K_F12:
+                    display.toggle_fullscreen()
+
+                if event.key == pg.K_f:
+                    spaceship.on_collision()
 
             if event.type == pg.KEYUP:
-                spaceship.on_key_release(event.key)
+                pass
 
         on_loop()
         on_render()
@@ -47,8 +57,8 @@ def on_loop():
 
 
 def on_render():
-    background.draw()
     spaceship.draw()
+    score.draw()
 
 
 if __name__ == '__main__':

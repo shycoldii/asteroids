@@ -3,14 +3,14 @@ import math
 from pygame.math import Vector2
 from pygame.sprite import Group
 
-from game.physical_object import PhysicalObject
-from game.spaceship.module import AbstractModule
+from game.base.base import DynamicObject
+from game.base.module import AbstractModule
 
 
 class Cannon(AbstractModule):
 
-    def __init__(self, space_pos, space_size, space_head, display):
-        super(Cannon, self).__init__(space_pos, space_size, space_head, display)
+    def __init__(self, display, space_pos, space_size, space_head):
+        super(Cannon, self).__init__(display, space_pos, space_size, space_head)
 
         self._missiles = Group()
         self._frequency = 60
@@ -20,7 +20,7 @@ class Cannon(AbstractModule):
 
     def _add_missile(self, pos, space_head):
         speed = Vector2(math.sin(math.radians(space_head)), -math.cos(math.radians(space_head)))
-        self._missiles.add(Missile(pos, speed, display=self._display))
+        self._missiles.add(Missile(self._display, pos, speed))
         self._pos = Vector2(pos)
 
     @property
@@ -34,7 +34,6 @@ class Cannon(AbstractModule):
                 self._add_missile(pos, space_head)
             else:
                 distance = pos.distance_to(list(self._missiles)[-1].position)
-                # TODO: баг с бОльшим измерением
                 if distance > self._frequency:
                     if min(self._display.get_size()) - distance > self._frequency:
                         self._add_missile(pos, space_head)
@@ -49,10 +48,10 @@ class Cannon(AbstractModule):
             p.draw()
 
 
-class Missile(PhysicalObject):
+class Missile(DynamicObject):
 
-    def __init__(self, pos, speed, display, *groups):
-        super().__init__(pos, display, *groups)
+    def __init__(self, display, pos, speed, *groups):
+        super().__init__(display, pos, *groups)
 
         self._start_pos = Vector2(pos)
         self._pos = Vector2(pos)
