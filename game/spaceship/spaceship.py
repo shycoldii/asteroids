@@ -145,15 +145,15 @@ class Spaceship(DynamicObject):
 class Health(StaticObject):
     # _source_images = ["../../data/0.png", "../../data/1.png", "../../data/2.png",
     #                   "../../data/3.png", "../../data/4.png"]
-    _source_images = ["./data/0.png", "./data/1.png", "./data/2.png",
-                      "./data/3.png", "./data/4.png"]
+    _source_images = ["./data/01.png", "./data/10.png", "./data/12.png",
+                      "./data/13.png", "./data/14.png"]
 
     def __init__(self, display, val=None):
         super().__init__(display)
 
         self._images = []
         for i in range(len(self._source_images)):
-            image = pg.transform.scale(pg.image.load(self._source_images[i]).convert(), (40, 40))
+            image = pg.transform.scale(pg.image.load(self._source_images[i]).convert_alpha(), (40, 40))
             image.set_colorkey((0, 0, 0))
             self._images.append(image)
 
