@@ -1,5 +1,5 @@
 import time
-from .asteroid import Enemies
+from .asteroid import Enemies, Explosion
 import pygame
 
 from .score import Score
@@ -20,10 +20,7 @@ class Map:
         self.end = None
         self.start_time = None
         self.respawn = time.time()
-
-        self.explosion_pics = [pygame.image.load(filename).convert_alpha() for filename in
-                               ["data/e1.png", "data/e2.png", "data/e3.png",
-                                "data/e4.png", "data/e5.png", "data/e6.png"]]
+        self.explosion = Explosion(self.display)
         self.reset()
 
     def reset(self):
@@ -43,10 +40,12 @@ class Map:
         :return: None
         """
         self.enemies.update()
+        self.explosion.update()
         if self.spaceship.is_alive():
             self.ship_collision()
             self.cannon_colision()
             self.spaceship.update()
+            self.display.set_ship_position(self.spaceship.position)
         else:
             self.spaceship.update()
             self.end = True
@@ -61,6 +60,9 @@ class Map:
         if not self.end:
             self.enemies.draw()
             self.spaceship.draw()
+            self.explosion.draw()
+        else:
+            self.explosion._animated = False
         self.score.draw(self.display)
 
     def cannon_colision(self):
@@ -69,8 +71,11 @@ class Map:
                 exp = pygame.sprite.collide_mask(missle, ast)
                 if exp:
                     self.ast_exp.play()
+                    position = ast.position
                     self.enemies.asteroids.remove(ast)
                     self.spaceship.cannon.missiles.remove(missle)
+                    self.explosion.pos = position
+                    self.explosion._animated = True
                     self.score.update()
 
     def ship_collision(self):
@@ -78,18 +83,20 @@ class Map:
             for ast in self.enemies.asteroids:
                 if pygame.sprite.collide_mask(self.spaceship, ast):
                     self.ship_exp.play()
+                    position = ast.position
                     self.enemies.asteroids.remove(ast)  # удаляем булыжник, в который врезались
-                    # анимация взрыва
+                    self.explosion.pos = position
+                    self.explosion._animated = True
                     self.spaceship.on_collision(True)
-                    # анимация потери хп
                     self.spaceship._pos = (self.display.get_width() // 2,
                                            self.display.get_height() // 2)  # переносим в середину
                     self.respawn = time.time()
+
     def update_best_score(self):
-        f = open("best_score.txt","r")
+        f = open("best_score.txt", "r")
         if int(f.readline().split()[0]) < self.score._counter:
             f.close()
-            f = open("best_score.txt","w+")
+            f = open("best_score.txt", "w+")
             f.write(str(self.score._counter))
             f.close()
             self.best_score = True

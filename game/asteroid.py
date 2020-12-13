@@ -5,8 +5,8 @@ from pygame.sprite import Group
 import random
 from pygame.math import Vector2
 from PIL import Image, ImageEnhance
-from game.base.base import DynamicObject
-from math import sin, cos
+from game.base.base import DynamicObject, StaticObject
+from math import sin, cos, fabs
 import time
 
 
@@ -43,10 +43,10 @@ class Asteroid(DynamicObject):
         config = configparser.ConfigParser()
         config.read('config.ini')
         pos = pos or (random.choice(
-            [random.randint(50, display.get_width() // 2 - 100),
-             random.randint(display.get_width() // 2 + 100, display.get_width()-50)]), random.choice(
-            [random.randint(50, display.get_height() // 2 - 100),
-             random.randint(display.get_height() // 2 + 100, display.get_height()-50)]))
+            [random.randint(0, fabs(int(display.get_ship_position().x) - 35)),
+             random.randint(fabs(int(display.get_ship_position().x) + 35 - display.get_width()), display.get_width())]),
+                      random.choice([random.randint(0, fabs(int(display.get_ship_position().y) - 35)), random.randint(
+                          fabs(int(display.get_ship_position().y) + 35 - display.get_height()), display.get_height())]))
         super().__init__(display, pos, *groups)
 
         self._display_size = self._display.get_size()
@@ -71,3 +71,49 @@ class Asteroid(DynamicObject):
         self._pos.x += self._speed.x * cos(self._angle)
         self._pos.y += self._speed.y * sin(self._angle)
         super()._move()
+
+
+class Explosion(StaticObject):
+    _source_images = ["./data/exp/11.png", "./data/exp/10.png", "./data/exp/9.png",
+                      "./data/exp/8.png", "./data/exp/7.png", "./data/exp/6.png",
+                      "./data/exp/5.png", "./data/exp/4.png", "./data/exp/3.png",
+                      "./data/exp/2.png", "./data/exp/1.png", "./data/exp/0.png"]
+
+    def __init__(self, display):
+        super().__init__(display)
+
+        self._images = []
+        for i in range(len(self._source_images)):
+            image = pg.transform.scale(pg.image.load(self._source_images[i]).convert_alpha(), (100, 100))
+            image.set_colorkey((0, 0, 0))
+            self._images.append(image)
+        self._current = self._images[-1]  # текущая для анимации картинка (начало взрыва)
+        self.pos = Vector2(0, 0)  # позиция взрыва
+        self._reset_animation()
+
+    def _place(self):
+        self.image = self._current
+        self.rect = self.image.get_rect(center=(self.pos.x, self.pos.y))  # делаем по картике прямоугольник
+
+    def _reset_animation(self):
+        self._animated = False
+        self._current_image = len(self._images) - 1  # устанавливаем первую картинку анимации
+        self._current_frame = self._current_image * 10  # устанавливаем максимальное количество фреймов
+
+    def _animate(self):
+        if self._current_frame >= 0 and self._current_image >= 0:
+            if self._current_frame % 10 == 0:  # каждый 10 фреймов
+                self._current = self._images[self._current_image]  # изменяем текущую картинку
+                self._current_image -= 1  # уменьшаем индекс текущей картинки (продвижение по анимации)
+            self._current_frame -= 1
+        else:
+            self._reset_animation()
+
+    def update(self):
+        if self._animated:
+            self._animate()
+
+    def draw(self, surface=None):
+        if self._animated:
+            self._place()
+            super().draw(surface)
