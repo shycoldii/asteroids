@@ -10,19 +10,12 @@ Space adventure of the ship with the aim of destroying asteroids and getting poi
 
 <h3> Управление/Control </h3>
 
-+ space - выстрел
-+ [<] - поворот влево
-+ [>] - поворот право
-+ [^] - ускорение
-+ [esc] -  выход
-+ [F12] - расширенное окно
-
-+ space - shot
-+ [<] - turn left
-+ [>] - turn right
-+ [^] - acceleration
-+ [esc] - exit
-+ [F12] - extended window
++ space - выстрел/shot
++ [<] - поворот влево/turn left
++ [>] - поворот право/turn right
++ [^] - ускорение/acceleration
++ [esc] -  выход/exit
++ [F12] - расширенное окно/extended window
 
 <h3>Необходимые библиотеки/Necessary libraries</h3>
 
