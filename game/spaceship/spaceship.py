@@ -20,7 +20,7 @@ class Spaceship(DynamicObject):
         # =======================================
         try:
             self._master_image = pg.transform.scale(
-                pg.image.load("/Users/13polbr/Desktop/asteroids/data/spaceship.png").convert_alpha(), (30, 30))
+                pg.image.load("./data/unnamed.png").convert_alpha(), (150, 150))
         except Exception:
             try:
                 self._master_image = pg.transform.scale(pg.image.load("./data/spaceship3.png").convert_alpha(),

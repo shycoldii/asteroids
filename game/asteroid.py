@@ -42,11 +42,21 @@ class Asteroid(DynamicObject):
     def __init__(self, display, pos=None, *groups):
         config = configparser.ConfigParser()
         config.read('config.ini')
-        pos = pos or (random.choice(
-            [random.randint(0, fabs(int(display.get_ship_position().x) - 35)),
-             random.randint(fabs(int(display.get_ship_position().x) + 35 - display.get_width()), display.get_width())]),
-                      random.choice([random.randint(0, fabs(int(display.get_ship_position().y) - 35)), random.randint(
-                          fabs(int(display.get_ship_position().y) + 35 - display.get_height()), display.get_height())]))
+        if not pos:
+            x = random.choice([0, random.randint(1, display.get_width() - 2), display.get_width()])
+            if x != 0 and x != display.get_width():
+                y = random.choice([0, display.get_height()])
+            else:
+                y = random.randint(0, display.get_height())
+            pos = Vector2(x, y)
+        else:
+            pos = pos
+        while fabs(pos.x - display.get_ship_position().x) < 35 or fabs(pos.y - display.get_ship_position().y) < 35:
+            pos.x = random.choice([0, random.randint(1, display.get_width()-2), display.get_width()])
+            if pos.x != 0 and pos.x != display.get_width():
+                pos.y = random.choice([0, display.get_height()])
+            else:
+                pos.y = random.randint(0, display.get_height())
         super().__init__(display, pos, *groups)
 
         self._display_size = self._display.get_size()
