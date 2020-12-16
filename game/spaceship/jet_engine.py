@@ -17,9 +17,10 @@ class JetEngine(AbstractModule):
         config.read('config.ini')
 
         self._particles = []
-        self._frequency = int(config["Objects-jet_engine"]["frequency"])
+        self._frequency = int(config["Objects-jet_engine"]["frequency"])  # частота появления частиц
 
     def _calc_position(self, space_pos, space_head):
+        """Расчитать позицию относительно spaceship"""
         return space_pos - Vector2(0, self._space_size[1] / 2).rotate((space_head + 180) % 360)
 
     def _add_particle(self, pos, space_head):
@@ -30,8 +31,8 @@ class JetEngine(AbstractModule):
     def update(self, space_pos, space_head):
         if self.started():
             pos = self._calc_position(space_pos, space_head)
-            if self._pos.distance_to(pos) > self._frequency:
-                self._add_particle(pos, space_head)
+            if self._pos.distance_to(pos) > self._frequency:  # если предыдущая частица достаточно далеко
+                self._add_particle(pos, space_head)  # создать новую частицу
 
         for p in self._particles:
             p.update()
@@ -64,16 +65,17 @@ class Particle(DynamicObject):
         self._done = False
 
         self._speed = speed
-        self._speed_vel = 1
+        self._speed_vel = 1  # коэффициент ускорения
 
         self._updated = 0
 
     def _move(self):
         self._pos += self._speed_vel * self._speed
-        self._speed *= 0.98
+        self._speed *= 0.98  # плавное замедление движения
         super()._move()
 
     def _live(self):
+        """Контролирует время жизни"""
         if self._updated % 4 == 0:
 
             if self._opacity > 22:
@@ -86,6 +88,7 @@ class Particle(DynamicObject):
         self._updated += 1
 
     def done(self):
+        """Жизненый цикл завершен"""
         return self._done
 
     def update(self):
