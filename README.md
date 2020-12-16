@@ -1,6 +1,6 @@
 <h1> SPACE </h1>
 
-<img src = "https://sun9-18.userapi.com/impf/98rPetVXacsCE-mV0tx4lVrVtaAReLjaVm1ADw/RujR44B-tXk.jpg?size=786x610&quality=96&proxy=1&sign=db5fd6c35f34f5368e9b13cbc7e3a584&type=album" align="center">
+<img src = "https://sun9-18.userapi.com/impf/98rPetVXacsCE-mV0tx4lVrVtaAReLjaVm1ADw/RujR44B-tXk.jpg?size=786x610&quality=96&proxy=1&sign=db5fd6c35f34f5368e9b13cbc7e3a584&type=album" align="center" width="800">
 
 <h3> Описание/Description </h3>
 
@@ -38,4 +38,4 @@ v1.1 15.12.2020
 
 <h3> Демонстрация/Demonstration </h3>
 
-<img src="data/anim.gif" width="600">
+<img src="data/anim.gif" width="800" align="center">
