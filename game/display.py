@@ -4,7 +4,7 @@ from pygame.math import Vector2
 
 
 class Display:
-    """Клас для управления окном и экраном дисплея"""
+    """Класс для управления объектами на экране"""
 
     def __init__(self, width, height):
         pg.display.init()

@@ -30,6 +30,10 @@ class Background(StaticObject):
         self.image = self._preloaded_image.copy()
 
     def _resize(self):
+        """
+        Изменение размера фона
+        :return: None
+        """
         x_factor = self._display.get_size()[0] / self._display_size[0]  # коэфф. масштабирования по x
         y_factor = self._display.get_size()[1] / self._display_size[1]  # коэфф. масштабирования по y
 
@@ -41,6 +45,10 @@ class Background(StaticObject):
         self._display_size = self._display.get_size()
 
     def update(self):
+        """
+        Обновление фона
+        :return: None
+        """
         if self._display_size != self._display.get_size():
             self._resize()
 
@@ -48,6 +56,11 @@ class Background(StaticObject):
             asteroid.update()
 
     def draw(self, surface=None):
+        """
+        Зарисовка фона
+        :param surface: где рисуем
+        :return: None
+        """
         super().draw(surface)
 
         for asteroid in self._asteroids:
@@ -92,6 +105,10 @@ class Asteroid(DynamicObject):
         self.image = self._preloaded_image.copy()
 
     def _resize(self):
+        """
+        Изменение размера
+        :return: None
+        """
         x_factor = self._display.get_size()[0] / self._display_size[0]  # коэфф. масштабирования по x
         y_factor = self._display.get_size()[1] / self._display_size[1]  # коэфф. масштабирования по y
 
@@ -110,6 +127,10 @@ class Asteroid(DynamicObject):
         super()._move()
 
     def _toroidal_geometry(self):
+        """
+        Функция тороидальной геометрии экрана
+        :return: None
+        """
         if self.rect.left > self._display.get_width():
             self._pos.x = 0
         elif self.rect.right < 0:
@@ -117,6 +138,10 @@ class Asteroid(DynamicObject):
         self.rect.center = self._pos
 
     def update(self):
+        """
+        Обновление состояния фоновых астероидов
+        :return: None
+        """
         if self._display_size != self._display.get_size():
             self._resize()
 

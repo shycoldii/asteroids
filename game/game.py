@@ -65,6 +65,10 @@ class Game:
             self.state = State.END
 
     def apply_end(self):
+        """
+        Применение состояния END
+        :return: None
+        """
         self.map.space_sound.stop()
         if not self.trigger:
             self.trigger = True
