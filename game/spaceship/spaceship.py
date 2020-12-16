@@ -1,12 +1,12 @@
 import configparser
+import math
 
 import pygame as pg
-import math
 from pygame.math import Vector2
 
 from game.base.base import DynamicObject, StaticObject
-from game.spaceship.jet_engine import JetEngine
 from game.spaceship.cannon import Cannon
+from game.spaceship.jet_engine import JetEngine
 
 
 class Spaceship(DynamicObject):
@@ -17,34 +17,48 @@ class Spaceship(DynamicObject):
         pos = pos or Vector2(display.get_width() / 2, display.get_height() / 2)
         super().__init__(display, pos, *groups)
 
-        # =======================================
-        try:
-            self._master_image = pg.transform.scale(
-                pg.image.load("./data/unnamed.png").convert_alpha(), (150, 150))
-        except Exception:
-            try:
-                self._master_image = pg.transform.scale(pg.image.load("./data/spaceship3.png").convert_alpha(),
-                                                        (60, 60))
-            except Exception:
-                self._master_image = pg.transform.scale(pg.image.load("../../data/spaceship3.png").convert_alpha(),
-                                                        (60, 60))
-        # =======================================
+        self._display_size = self._display.get_size()
+        self._size = (round(self._display_size[0] / int(config["Objects-spaceship"]["size_factor"])),
+                      round(self._display_size[0] / int(config["Objects-spaceship"]["size_factor"])))
+
+        self._sprite = "./data/spaceship3.png"
+        self._preloaded_image = pg.image.load(self._sprite).convert_alpha()
+
+        self._master_image = pg.transform.scale(self._preloaded_image, self._size)
 
         self.image = self._master_image.copy()
         self.rect = self.image.get_rect(center=self._pos)
 
         self._head = 0
         self._rotation = 0
-        self._rotation_vel = 3
+        self._rotation_vel = float(config["Objects-spaceship"]["rotation_vel"])
 
         self._speed = Vector2(0, 0)
         self._force = Vector2(0, 0)
-        self._force_vel = 0.2
+        self._force_vel = float(config["Objects-spaceship"]["force_vel"])
 
         self._jet_engine = JetEngine(self._display, self._pos, self._master_image.get_size(), self._head)
         self._cannon = Cannon(self._display, self._pos, self._master_image.get_size(), self._head)
         self._hp = Health(display)
         self._reset_animation()
+
+    def _load_image(self):
+        self._master_image = self._preloaded_image.copy()
+
+    def _resize(self):
+        x_factor = self._display.get_size()[0] / self._display_size[0]
+        y_factor = self._display.get_size()[1] / self._display_size[1]
+
+        self._load_image()
+        self._size = (round(self._size[0] * x_factor), round(self._size[0] * x_factor))
+
+        self._master_image = pg.transform.scale(self._master_image, self._size)  # поверхность, которая будет вращаться
+        self.image = self._master_image.copy()  # sprite на подвижной поверхности
+        self.rect = self.image.get_rect(center=(round(self.rect.centerx * x_factor),
+                                                round(self.rect.centery * y_factor)))
+        self._pos = Vector2(self.rect.center)
+
+        self._display_size = self._display.get_size()
 
     def _move(self):
         self._pos += self._speed
@@ -123,17 +137,20 @@ class Spaceship(DynamicObject):
             self._on_key_release(event.key)
 
     def update(self):
-        super().update()
         if self._jet_engine.started():
             self._boost()
         if self._animated:
             self._animate()
+
+        if self._display_size != self._display.get_size():
+            self._resize()
 
         self._jet_engine.update(self._pos, self._head)
         self._cannon.update(self._pos, self._head)
         self._hp.update()
 
         self._rotate()
+        super().update()
 
     def draw(self, surface=None):
         super().draw(surface)
@@ -143,31 +160,33 @@ class Spaceship(DynamicObject):
 
 
 class Health(StaticObject):
-    # _source_images = ["../../data/0.png", "../../data/1.png", "../../data/2.png",
-    #                   "../../data/3.png", "../../data/4.png"]
-    _source_images = ["./data/01.png", "./data/10.png", "./data/12.png",
-                      "./data/13.png", "./data/14.png"]
 
     def __init__(self, display, val=None):
         super().__init__(display)
+        config = configparser.ConfigParser()
+        config.read('config.ini')
 
-        self._images = []
-        for i in range(len(self._source_images)):
-            image = pg.transform.scale(pg.image.load(self._source_images[i]).convert_alpha(), (40, 40))
+        self._display_size = self._display.get_size()
+        self._size = (int(config["Objects-spaceship-health"]["size"]),) * 2
+
+        self._sprites = ["./data/01.png", "./data/10.png", "./data/12.png",
+                         "./data/13.png", "./data/14.png"]
+        self._preloaded_images = []
+        for i in range(len(self._sprites)):
+            image = pg.transform.scale(pg.image.load(self._sprites[i]).convert_alpha(), self._size)
             image.set_colorkey((0, 0, 0))
-            self._images.append(image)
+            self._preloaded_images.append(image)
 
         self._max_hp = self._hp = val or 3
-        self._current = [self._images[-1] for _ in range(self._max_hp)]
+        self._current = [self._preloaded_images[-1] for _ in range(self._max_hp)]
         self._place()
 
         self._reset_animation()
 
     def _place(self):
-        self.image = pg.Surface((self._images[1].get_width() * self._max_hp,
-                                 self._images[1].get_height()), pg.SRCALPHA)
-        self.rect = self.image.get_rect(topleft=(self._display.get_width() - (self.image.get_width() + 10),
-                                                 10))
+        self.image = pg.Surface((self._preloaded_images[1].get_width() * self._max_hp,
+                                 self._preloaded_images[1].get_height()), pg.SRCALPHA)
+        self.rect = self.image.get_rect(topleft=(self._display.get_width() - (self.image.get_width() + 10), 10))
 
         for i in range(len(self._current)):
             image = self._current[i]
@@ -176,13 +195,13 @@ class Health(StaticObject):
 
     def _reset_animation(self):
         self._animated = False
-        self._current_image = len(self._images) - 1
+        self._current_image = len(self._preloaded_images) - 1
         self._current_frame = self._current_image * 10
 
     def _animate(self):
         if self._current_frame >= 0 and self._current_image >= 0:
             if self._current_frame % 10 == 0:
-                self._current[self._hp] = self._images[self._current_image]
+                self._current[self._hp] = self._preloaded_images[self._current_image]
                 self._current_image -= 1
             self._current_frame -= 1
         else:

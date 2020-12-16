@@ -1,9 +1,11 @@
-import pygame as pg
+import configparser
 import math
+
+import pygame as pg
 from pygame.math import Vector2
 
 from game.base.base import DynamicObject
-from game.base.module import AbstractModule
+from game.spaceship.module import AbstractModule
 
 
 class JetEngine(AbstractModule):
@@ -11,8 +13,11 @@ class JetEngine(AbstractModule):
     def __init__(self, display, space_pos, space_size, space_head):
         super(JetEngine, self).__init__(display, space_pos, space_size, space_head)
 
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
         self._particles = []
-        self._frequency = 15
+        self._frequency = int(config["Objects-jet_engine"]["frequency"])
 
     def _calc_position(self, space_pos, space_head):
         return space_pos - Vector2(0, self._space_size[1] / 2).rotate((space_head + 180) % 360)
@@ -43,14 +48,19 @@ class Particle(DynamicObject):
     def __init__(self, display, pos, speed, *groups):
         super().__init__(display, pos, *groups)
 
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
         self._pos = Vector2(pos)
-        self._radius = 2
+        self._radius = int(config["Objects-jet_engine-particle"]["radius"])
 
         self.image = pg.Surface((2 * self._radius, 2 * self._radius), pg.SRCALPHA)
         self.rect = self.image.get_rect(center=self._pos)
 
         self._opacity = 255
-        self._color = (0, 240, 240)
+        self._color = (int(config["Objects-jet_engine-particle"]["color_r"]),
+                       int(config["Objects-jet_engine-particle"]["color_g"]),
+                       int(config["Objects-jet_engine-particle"]["color_b"]))
         self._done = False
 
         self._speed = speed

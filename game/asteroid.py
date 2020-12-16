@@ -1,13 +1,14 @@
 import configparser
+import random
+import time
+from math import sin, cos, fabs
 
 import pygame as pg
-from pygame.sprite import Group
-import random
-from pygame.math import Vector2
 from PIL import Image, ImageEnhance
+from pygame.math import Vector2
+from pygame.sprite import Group
+
 from game.base.base import DynamicObject, StaticObject
-from math import sin, cos, fabs
-import time
 
 
 class Enemies:
@@ -52,7 +53,7 @@ class Asteroid(DynamicObject):
         else:
             pos = pos
         while fabs(pos.x - display.get_ship_position().x) < 35 or fabs(pos.y - display.get_ship_position().y) < 35:
-            pos.x = random.choice([0, random.randint(1, display.get_width()-2), display.get_width()])
+            pos.x = random.choice([0, random.randint(1, display.get_width() - 2), display.get_width()])
             if pos.x != 0 and pos.x != display.get_width():
                 pos.y = random.choice([0, display.get_height()])
             else:
@@ -72,15 +73,40 @@ class Asteroid(DynamicObject):
         image = ImageEnhance.Contrast(image).enhance(0.85)
         color_key = image.getpixel((0, 0))
 
-        self.image = pg.image.fromstring(image.tobytes(), image.size, image.mode).convert()
-        self.image.set_colorkey(color_key)
+        self._preloaded_image = pg.image.fromstring(image.tobytes(), image.size, image.mode).convert()
+        self._preloaded_image.set_colorkey(color_key)
+
+        self.image = self._preloaded_image.copy()
         self.rect = self.image.get_rect(center=self._pos)
+
+    def _load_image(self):
+        self.image = self._preloaded_image.copy()
+
+    def _resize(self):
+        x_factor = self._display.get_size()[0] / self._display_size[0]
+        y_factor = self._display.get_size()[1] / self._display_size[1]
+
+        self._load_image()
+        self._size = (round(self._size[0] * x_factor), round(self._size[1] * y_factor))
+
+        self.image = pg.transform.scale(self.image, self._size)
+        self.rect = self.image.get_rect(center=(round(self.rect.centerx * x_factor),
+                                                round(self.rect.centery * y_factor)))
+        self._pos = Vector2(self.rect.center)
+
+        self._display_size = self._display.get_size()
 
     def _move(self):
         # прибавляем к скорости ее проекцию на оси в зависимости от угла
         self._pos.x += self._speed.x * cos(self._angle)
         self._pos.y += self._speed.y * sin(self._angle)
         super()._move()
+
+    def update(self):
+        if self._display_size != self._display.get_size():
+            self._resize()
+
+        super().update()
 
 
 class Explosion(StaticObject):
