@@ -1,12 +1,12 @@
-import pygame
 import configparser
 
+import pygame
 from pygame.math import Vector2
 
 from .background import Background
 from .display import Display
-from .state import State
 from .map import Map
+from .state import State
 
 
 class Game:
@@ -49,8 +49,9 @@ class Game:
         self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2 - 2,
                                                     self.display.get_height() / 2 - 5), size=50)
         self.display.draw_text("click to start", pos=Vector2(self.display.get_width() / 2,
-                                                             self.display.get_height() / 2 + 0.1 * self.display.get_height()),
-                               size=15,color=(255,255,255,self.alpha))
+                                                             self.display.get_height() / 2 + 0.1 * self.display
+                                                             .get_height()),
+                               size=15, color=(255, 255, 255, self.alpha))
 
     def apply_game(self):
         """
@@ -62,7 +63,6 @@ class Game:
         if self.map.end:
             self.apply_end()
             self.state = State.END
-
 
     def apply_end(self):
         self.map.space_sound.stop()
@@ -79,24 +79,26 @@ class Game:
         x_centered = self.display.get_width() / 2 - x_size / 2
         y_centered = self.display.get_height() / 2 - y_size / 2
         if self.map.best_score:
-            color1 = (198, 169, 207,self.alpha)
+            color1 = (198, 169, 207, self.alpha)
             color2 = (119, 93, 128)
-            self.display.draw_text(f"new record: {self.map.score._counter}", pos=Vector2(self.display.get_width() / 2,
-                                                         self.display.get_height() / 2 - 0.1 * self.display.get_height()),
+            self.display.draw_text(f"new record: {self.map.score._counter}",
+                                   pos=Vector2(self.display.get_width() / 2,
+                                               self.display.get_height() / 2 -
+                                               0.1 * self.display.get_height()),
                                    size=15, color=color1)
         else:
-            color1 = (209, 100, 100,self.alpha)
+            color1 = (209, 100, 100, self.alpha)
             color2 = (107, 51, 64)
 
-        self.display.draw_rect(size=Vector2(x_size, y_size), color=(color1)
-                                   , pos=Vector2(x_centered, y_centered), fill=False)
+        self.display.draw_rect(size=Vector2(x_size, y_size), color=color1,
+                               pos=Vector2(x_centered, y_centered), fill=False)
         self.display.draw_text("replay", pos=Vector2(self.display.get_width() / 2,
-                                                         self.display.get_height() / 2 + 0.1 * self.display.get_height()),
-                                   size=15, color=color1)
+                                                     self.display.get_height() / 2 + 0.1 * self.display.get_height()),
+                               size=15, color=color1)
         self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2, self.display.get_height() / 2),
-                                   size=50, color=color2)
+                               size=50, color=color2)
         self.display.draw_text("Space", pos=Vector2(self.display.get_width() / 2 - 2,
-                                                        self.display.get_height() / 2 - 5), size=50)
+                                                    self.display.get_height() / 2 - 5), size=50)
 
         if x_centered <= mx <= x_centered + x_size and y_centered <= my <= y_centered + y_size and mouse_pressed:
             self.state = State.GAME
@@ -132,11 +134,10 @@ class Game:
                 if self.state == State.GAME:
                     self.map.spaceship.on_event(event)
             elif event.type == pygame.KEYUP:
-                    if self.state == State.GAME:
-                        self.map.spaceship.on_event(event)
+                if self.state == State.GAME:
+                    self.map.spaceship.on_event(event)
             if event.type == pygame.QUIT:  # выход
                 self.finished = True
-
 
     def change_alpha(self):
         """

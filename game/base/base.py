@@ -1,5 +1,5 @@
-from pygame.sprite import Sprite
 from pygame.math import Vector2
+from pygame.sprite import Sprite
 
 
 class BasicObject(Sprite):

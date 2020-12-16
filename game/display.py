@@ -1,6 +1,6 @@
 import pygame as pg
-from pygame.math import Vector2
 import pygame.gfxdraw
+from pygame.math import Vector2
 
 
 class Display:
@@ -16,7 +16,7 @@ class Display:
 
         self._fullscreen = False
 
-        self.ship_position = Vector2(width//2, height//2)
+        self.ship_position = Vector2(width // 2, height // 2)
 
     def get_width(self):
         return self._size[0]
@@ -94,10 +94,7 @@ class Display:
         :return: None
         """
         font_size = round(size)
-        try:
-            font_family = "./data/Astrolab.ttf"
-        except:
-            font_family = "data/Astrolab.ttf"
+        font_family = "./data/Astrolab.ttf"
         font = pg.font.Font(font_family, font_size)
         text = str(text)
         color = [int(color[i]) if color[i] <= 255 else 255 for i in range(len(color))]

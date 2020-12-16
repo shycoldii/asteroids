@@ -1,7 +1,8 @@
 import time
-from .asteroid import Enemies, Explosion
+
 import pygame
 
+from .asteroid import Enemies, Explosion
 from .score import Score
 from .spaceship.spaceship import Spaceship
 
@@ -50,7 +51,6 @@ class Map:
             self.spaceship.update()
             self.end = True
             self.update_best_score()
-
 
     def draw_game(self):
         """

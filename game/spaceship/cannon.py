@@ -1,22 +1,28 @@
+import configparser
+import math
+
 import pygame
 import pygame as pg
-import math
 from pygame.math import Vector2
 from pygame.sprite import Group
 
 from game.base.base import DynamicObject
-from game.base.module import AbstractModule
+from game.spaceship.module import AbstractModule
 
 
 class Cannon(AbstractModule):
     pygame.mixer.init()
     missile_sound = pygame.mixer.Sound("data/missile.mp3")
-    missile_sound.set_volume(missile_sound.get_volume()-0.7)
+    missile_sound.set_volume(missile_sound.get_volume() - 0.7)
+
     def __init__(self, display, space_pos, space_size, space_head):
         super(Cannon, self).__init__(display, space_pos, space_size, space_head)
 
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
         self._missiles = Group()
-        self._frequency = 60
+        self._frequency = int(config["Objects-cannon"]["frequency"])
 
     def _calc_position(self, space_pos, space_head):
         return space_pos - Vector2(0, self._space_size[1] / 2).rotate(space_head % 360)
@@ -26,7 +32,6 @@ class Cannon(AbstractModule):
         speed = Vector2(math.sin(math.radians(space_head)), -math.cos(math.radians(space_head)))
         self._missiles.add(Missile(self._display, pos, speed))
         self._pos = Vector2(pos)
-
 
     @property
     def missiles(self):
@@ -58,21 +63,39 @@ class Missile(DynamicObject):
     def __init__(self, display, pos, speed, *groups):
         super().__init__(display, pos, *groups)
 
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
+        self._display_size = self._display.get_size()
+
         self._start_pos = Vector2(pos)
         self._pos = Vector2(pos)
-        self._radius = 3
+        self._radius = int(config["Objects-cannon-missile"]["radius"])
 
         self.image = pg.Surface((2 * self._radius, 2 * self._radius), pg.SRCALPHA)
         self.rect = self.image.get_rect(center=self._pos)
 
         self._opacity = 255
-        self._color = (255, 0, 0)
+        self._color = (int(config["Objects-cannon-missile"]["color_r"]),
+                       int(config["Objects-cannon-missile"]["color_g"]),
+                       int(config["Objects-cannon-missile"]["color_b"]))
         self._done = False
 
         self._speed = speed
         self._speed_vel = 7
 
         self._lifetime = int(0.63 * min((self._display.get_size())) / self._speed_vel)
+
+    def _resize(self):
+        x_factor = self._display.get_size()[0] / self._display_size[0]
+        y_factor = self._display.get_size()[1] / self._display_size[1]
+
+        self.rect = self.image.get_rect(center=(self.rect.centerx * x_factor,
+                                                self.rect.centery * y_factor))
+
+        self._pos = Vector2(self.rect.center)
+
+        self._display_size = self._display.get_size()
 
     def _move(self):
         self._pos += self._speed_vel * self._speed
@@ -95,8 +118,11 @@ class Missile(DynamicObject):
         return self._done
 
     def update(self):
-        super().update()
+        if self._display_size != self._display.get_size():
+            self._resize()
+
         self._live()
+        super().update()
 
     def draw(self, surface=None):
         pg.draw.circle(self.image, self._color, (self._radius, self._radius), self._radius)
