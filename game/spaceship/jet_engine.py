@@ -24,6 +24,12 @@ class JetEngine(AbstractModule):
         return space_pos - Vector2(0, self._space_size[1] / 2).rotate((space_head + 180) % 360)
 
     def _add_particle(self, pos, space_head):
+        """
+        Создает/добавляет частичку корабля
+        :param pos: где
+        :param space_head: часть корабля
+        :return: None
+        """
         speed = -1 * Vector2(math.sin(math.radians(space_head)), -math.cos(math.radians(space_head)))
         self._particles.append(Particle(self._display, pos, speed))
         self._pos = Vector2(pos)

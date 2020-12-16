@@ -103,6 +103,11 @@ class Spaceship(DynamicObject):
             self._animated = True
 
     def _on_key_press(self, key):
+        """
+        Реакция на нажатую клавишу
+        :param key: нажатая клавиша
+        :return: None
+        """
         if key == pg.K_UP:
             self._jet_engine.start()  # усорение
         if key == pg.K_LEFT:
@@ -113,6 +118,11 @@ class Spaceship(DynamicObject):
             self._cannon.start()  # активация пушки, выстрелы
 
     def _on_key_release(self, key):
+        """
+        Реакция на прекращенное нажатие
+        :param key: нажатая клавиша
+        :return: None
+        """
         if key == pg.K_LEFT or key == pg.K_RIGHT:
             self._rotation = 0  # остановка вращения
         if key == pg.K_UP:
@@ -135,6 +145,11 @@ class Spaceship(DynamicObject):
             self._on_damage()
 
     def on_event(self, event):
+        """
+        Реакция на клавиатуру
+        :param event: событие
+        :return: None
+        """
         if event.type == pg.KEYDOWN:
             self._on_key_press(event.key)
         elif event.type == pg.KEYUP:

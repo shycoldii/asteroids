@@ -66,6 +66,10 @@ class Map:
         self.score.draw(self.display)
 
     def cannon_colision(self):
+        """
+        Столкновение пули с астероидом
+        :return: None
+        """
         for missle in self.spaceship.cannon.missiles:
             for ast in self.enemies.asteroids:
                 exp = pygame.sprite.collide_mask(missle, ast)
@@ -79,6 +83,10 @@ class Map:
                     self.score.update()
 
     def ship_collision(self):
+        """
+        Столкновение корабля и астероида
+        :return: None
+        """
         if time.time() - self.respawn > 1:
             for ast in self.enemies.asteroids:
                 if pygame.sprite.collide_mask(self.spaceship, ast):
@@ -93,6 +101,10 @@ class Map:
                     self.respawn = time.time()
 
     def update_best_score(self):
+        """
+        Конечное обновление рекорда
+        :return: None
+        """
         f = open("best_score.txt", "r")
         if int(f.readline().split()[0]) < self.score._counter:
             f.close()

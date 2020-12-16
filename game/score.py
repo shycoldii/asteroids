@@ -22,6 +22,10 @@ class Score(StaticObject):
         self.rect = self.image.get_rect(topleft=(10, 10))
 
     def update(self):
+        """
+        Обновление счета
+        :return: None
+        """
         self._counter += 1
         self.image = self._font.render(str(self._counter), True, self._color)
         self.rect = self.image.get_rect(topleft=(10, 10))

@@ -20,6 +20,10 @@ class Enemies:
         self.check_time = time.time()  # начало времени отсчета для постепенного спавна астероидов
 
     def update(self):
+        """
+        Обновление состояния врагов
+        :return: None
+        """
         if self._size != self._display.get_size():
             self._size = self._display.get_size()
         if time.time() - self.check_time > 1 and len(self._asteroids) <= 10:  # проверяем прошедшее время
@@ -83,6 +87,10 @@ class Asteroid(DynamicObject):
         self.image = self._preloaded_image.copy()
 
     def _resize(self):
+        """
+        Изменение размера
+        :return: None
+        """
         x_factor = self._display.get_size()[0] / self._display_size[0]
         y_factor = self._display.get_size()[1] / self._display_size[1]
 
@@ -103,6 +111,10 @@ class Asteroid(DynamicObject):
         super()._move()
 
     def update(self):
+        """
+        Обновление состояния существ
+        :return: None
+        """
         if self._display_size != self._display.get_size():
             self._resize()
 
@@ -128,6 +140,10 @@ class Explosion(StaticObject):
         self._reset_animation()
 
     def _place(self):
+        """
+        Прямоугольник по картинке
+        :return: None
+        """
         self.image = self._current
         self.rect = self.image.get_rect(center=(self.pos.x, self.pos.y))  # делаем по картике прямоугольник
 
@@ -137,6 +153,10 @@ class Explosion(StaticObject):
         self._current_frame = self._current_image * 10  # устанавливаем максимальное количество фреймов
 
     def _animate(self):
+        """
+        Анимированное состояния астероидов
+        :return: None
+        """
         if self._current_frame >= 0 and self._current_image >= 0:
             if self._current_frame % 10 == 0:  # каждый 10 фреймов
                 self._current = self._images[self._current_image]  # изменяем текущую картинку
