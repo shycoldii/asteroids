@@ -21,14 +21,15 @@ class Cannon(AbstractModule):
         config = configparser.ConfigParser()
         config.read('config.ini')
 
-        self._missiles = Group()
-        self._frequency = int(config["Objects-cannon"]["frequency"])
+        self._missiles = Group()  # выпущенные ракеты
+        self._frequency = int(config["Objects-cannon"]["frequency"])  # расстояние между двумя ракетами
 
     def _calc_position(self, space_pos, space_head):
+        """Расчитать позицию относительно spaceship"""
         return space_pos - Vector2(0, self._space_size[1] / 2).rotate(space_head % 360)
 
     def _add_missile(self, pos, space_head):
-        self.missile_sound.play()
+        self.missile_sound.play()  # возпроизвести звук выстрела
         speed = Vector2(math.sin(math.radians(space_head)), -math.cos(math.radians(space_head)))
         self._missiles.add(Missile(self._display, pos, speed))
         self._pos = Vector2(pos)
@@ -40,6 +41,7 @@ class Cannon(AbstractModule):
     def update(self, space_pos, space_head):
         if self.started():
             pos = self._calc_position(space_pos, space_head)
+            # создание ракеты согласно частоте выстрелов
             if len(self._missiles) == 0:
                 self._add_missile(pos, space_head)
             else:
@@ -68,7 +70,6 @@ class Missile(DynamicObject):
 
         self._display_size = self._display.get_size()
 
-        self._start_pos = Vector2(pos)
         self._pos = Vector2(pos)
         self._radius = int(config["Objects-cannon-missile"]["radius"])
 
@@ -81,8 +82,8 @@ class Missile(DynamicObject):
                        int(config["Objects-cannon-missile"]["color_b"]))
         self._done = False
 
-        self._speed = speed
-        self._speed_vel = 7
+        self._speed = speed  # направления скорости
+        self._speed_vel = 7  # скорость полета
 
         self._lifetime = int(0.63 * min((self._display.get_size())) / self._speed_vel)
 
@@ -102,6 +103,7 @@ class Missile(DynamicObject):
         super()._move()
 
     def _live(self):
+        """Определяет жизненный цикл"""
         if self._lifetime > 0:
             if self._lifetime < 25:
                 if self._opacity > 11:
