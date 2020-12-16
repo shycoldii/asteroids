@@ -38,3 +38,4 @@ v1.1 15.12.2020
 
 <h3> Демонстрация/Demonstration </h3>
 
+<img src="data/anim.gif" width="600">

@@ -4,13 +4,14 @@ from pygame.math import Vector2
 
 
 class Display:
+    """Клас для управления окном и экраном дисплея"""
 
     def __init__(self, width, height):
         pg.display.init()
         pg.mouse.set_cursor(*pg.cursors.tri_left)
 
         self._size = (width, height)
-        self._default_size = (width, height)
+        self._default_size = (width, height)  # начальный размер окна (не изменяется)
         self._full_size = (pg.display.Info().current_w, pg.display.Info().current_h)
         self._display = pg.display.set_mode(self._size)
 
@@ -43,6 +44,11 @@ class Display:
         return self._display.fill(color, rect, special_flags)
 
     def resize(self, new_size):
+        """
+        Изменяет размер окна в соответствии с переданным параметром
+        :param new_size: новый размер окна
+        :return: None
+        """
         if self._fullscreen:
             self._display = pg.display.set_mode(new_size, pg.FULLSCREEN)
             self._size = self._full_size
@@ -51,6 +57,10 @@ class Display:
             self._size = self._default_size
 
     def toggle_fullscreen(self):
+        """
+        Переключает размер окна: полный экран - пользовательский размер
+        :return: None
+        """
         self._fullscreen = not self._fullscreen
         if self._fullscreen:
             self.resize(self._full_size)
@@ -58,6 +68,11 @@ class Display:
             self.resize(self._default_size)
 
     def draw(self, obj):
+        """
+        Отрисовывает переданный объект
+        :param obj: объект, реализующий метод draw()
+        :return: None
+        """
         obj.draw()
 
     def draw_img(self, img, size, pos):
